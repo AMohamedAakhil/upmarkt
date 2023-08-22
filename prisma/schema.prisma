@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id       String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String
+  clerkDetails String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id               String   @id @default(cuid())
+  date             DateTime @default(now())
+  customerName     String
+  status           String
+  total            Float
+  orderStatus      String
+  paymentMethod    String
+  paymentReference String
+  address          Address?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Address {
+  id         String @id @default(cuid())
+  name       String
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String
+  order      Order  @relation(fields: [orderId], references: [id])
+  orderId    String @unique
+}
