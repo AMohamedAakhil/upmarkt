@@ -1,5 +1,4 @@
 import { prisma } from "@/server/db";
-import { clerkClient } from "@clerk/nextjs/server";
 import { IncomingHttpHeaders } from "http";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
