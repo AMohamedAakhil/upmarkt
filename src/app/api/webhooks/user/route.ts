@@ -31,12 +31,14 @@ async function handler(request: Request) {
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, ...attributes } = evt.data;
-    void await prisma.user.create({
+    const res =  await prisma.user.create({
       data: {
         clerkId: id as string,
         attributes: attributes,
       },
     })
+
+    console.log(res);
 
   }
 
