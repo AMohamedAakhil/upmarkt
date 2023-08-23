@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any */
+
 import { prisma } from "@/server/db";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
