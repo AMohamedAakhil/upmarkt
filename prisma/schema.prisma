@@ -9,37 +9,358 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  role      String
-  clerkDetails String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String           @id @default(cuid())
+  externalId        String           @unique
+  attributes Json 
+  reviews            CustomerReview[]
+  orders             Order[]
+  productsInWishlist Product[]        @relation("usersInWishlist")
+  productsInCart     Product[]        @relation("usersInCart")
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
 }
 
 model Order {
-  id               String   @id @default(cuid())
-  date             DateTime @default(now())
-  customerName     String
-  status           String
-  total            Float
-  orderStatus      String
-  paymentMethod    String
-  paymentReference String
-  address          Address?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id          String        @id @default(cuid())
+  date        DateTime      @default(now())
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String
+  status      String
+  total       Float
+  address     Address       @relation(fields: [addressId], references: [id])
+  transaction Transaction[]
+  products    Product[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  addressId   String
+
+  @@index([userId])
+  @@index([addressId])
+
 }
 
 model Address {
-  id         String @id @default(cuid())
+  id         String   @id @default(cuid())
   name       String
   street     String
   city       String
   state      String
   postalCode String
   country    String
-  order      Order  @relation(fields: [orderId], references: [id])
-  orderId    String @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Order      Order[]
+}
+
+model Seller {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  phone     String
+  email     String
+  store     Store[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Store {
+  id                String             @id @default(cuid())
+  seller            Seller             @relation(fields: [sellerId], references: [id])
+  sellerId          String
+  description       String
+  address           String
+  logoUrl           String
+  bannerUrl         String
+  status            Boolean
+  sections          Section[]
+  categories        StoreCategory[]
+  attributes        Attribute[]
+  products          Product[]
+  brands            Brand[]
+  news              News[]
+  banners           Banner[]
+  coupons           Coupon[]
+  pushNotifications PushNotification[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([sellerId])
+}
+
+model Section {
+  id          String    @id @default(cuid())
+  title       String
+  imageLength Int
+  images      Gallery[]
+  store       Store     @relation(fields: [storeId], references: [id])
+  storeId     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([storeId])
+}
+
+model Gallery {
+  id        String  @id @default(cuid())
+  order     Int     @unique
+  title     String
+  url       String
+  section   Section @relation(fields: [sectionId], references: [id])
+  sectionId String
+
+  @@index([sectionId])
+}
+
+model Product {
+  id                             String           @id @default(cuid())
+  originType                     String // INHOUSE OR SELLER PRODUCT
+  name                           String
+  description                    String
+  warranty                       String
+  category                       String
+  subCategory                    String
+  subSubCategory                 String?
+  productCode                    String
+  brand                          String
+  unit                           String
+  colors                         Color[]
+  attributes                     Attribute[]
+  unitPrice                      Float
+  purchasePrice                  Float
+  tax                            Float
+  discount                       Float
+  typeOfDiscount                 String
+  variants                       Variant[]
+  totalQuantity                  Int
+  minimumQuantity                Int
+  shippingCost                   Float
+  deliveryDuration               String
+  shippingCostMultiplyByQuantity Boolean
+  status                         Boolean
+  images                         Image[]          @relation("productImages")
+  thumbnailUrl                   String
+  youtubeLink                    String
+  metaTitle                      String
+  metaDescription                String
+  metaImageUrl                   String
+  banner                         Banner[]
+  reviews                        CustomerReview[]
+  usersInWishlist                User[]           @relation("usersInWishlist")
+  usersInCart                    User[]           @relation("usersInCart")
+  orders                         Order[]
+  store                          Store            @relation(fields: [storeId], references: [id])
+  storeId                        String
+  createdAt                      DateTime         @default(now())
+  updatedAt                      DateTime         @updatedAt
+
+  @@index([storeId])
+}
+
+model Variant {
+  id       String @id @default(cuid())
+  name     String
+  price    Float
+  sku      String
+  quantity Int
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@index([productId])
+}
+
+model Color {
+  id        String  @id @default(cuid())
+  name      String
+  code      String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@index([productId])
+}
+
+model Image {
+  id              String  @id @default(cuid())
+  order           Int     @unique
+  name            String
+  url             String
+  productImages   Product @relation("productImages", fields: [productImagesId], references: [id])
+  productImagesId String
+
+  @@index([productImagesId])
+}
+
+model Brand {
+  id        String   @id @default(cuid())
+  name      String
+  logoUrl   String
+  store     Store    @relation(fields: [storeId], references: [id])
+  storeId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model StoreCategory {
+  id             String             @id @default(cuid())
+  name           String
+  priorityNumber Int
+  imageUrl       String
+  store          Store              @relation(fields: [storeId], references: [id])
+  storeId        String
+  subCategories  StoreSubCategory[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@index([storeId])
+}
+
+model StoreSubCategory {
+  id               String                @id @default(cuid())
+  name             String
+  priorityNumber   Int
+  imageUrl         String
+  category         StoreCategory         @relation(fields: [categoryId], references: [id])
+  categoryId       String
+  subSubCategories StoreSubSubCategory[]
+  mainCategoryName String
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+
+  @@index([categoryId])
+}
+
+model StoreSubSubCategory {
+  id              String           @id @default(cuid())
+  name            String
+  priorityNumber  Int
+  imageUrl        String
+  subCategory     StoreSubCategory @relation(fields: [subCategoryId], references: [id])
+  subCategoryId   String
+  subCategoryName String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([subCategoryId])
+}
+
+model Attribute {
+  id        String    @id @default(cuid())
+  name      String
+  products  Product[]
+  store     Store     @relation(fields: [storeId], references: [id])
+  storeId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([storeId])
+}
+
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String
+  store       Store    @relation(fields: [storeId], references: [id])
+  storeId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model Banner {
+  id           String   @id @default(cuid())
+  name         String
+  imageUrl     String
+  type         String
+  resourceType String
+  product      Product  @relation(fields: [productId], references: [id])
+  productId    String
+  store        Store    @relation(fields: [storeId], references: [id])
+  storeId      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([productId])
+  @@index([storeId])
+}
+
+model Coupon {
+  id                    String   @id @default(cuid())
+  type                  String
+  code                  String
+  title                 String
+  discountType          String
+  startDate             DateTime
+  expireDate            DateTime
+  discount              String
+  limit                 Int //For the same user
+  minimumPurchaseAmount Float
+  maximumDiscountAmount Float
+  totalUse              Int
+  status                Boolean
+
+  store     Store    @relation(fields: [storeId], references: [id])
+  storeId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model PushNotification {
+  id String @id @default(cuid())
+
+  title             String
+  imageUrl          String
+  description       String
+  status            Boolean
+  notificationCount Int
+  store             Store    @relation(fields: [storeId], references: [id])
+  storeId           String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+// Yet to add Flash Deals, Deal of  the day, Featured Deals
+
+model CustomerReview {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  rating    Int
+  comment   String
+  status    Boolean
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([userId])
+}
+
+model Transaction {
+  id              String   @id @default(cuid())
+  order           Order    @relation(fields: [orderId], references: [id])
+  orderId         String
+  transactionId   String
+  amount          Float
+  sellerAmount    Float
+  adminCommission Float
+  receivedBy      String
+  deliveredBy     String
+  deliveryCharge  Float
+  paymentMethod   String
+  tax             Float
+  date            DateTime
+  status          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([orderId])
 }

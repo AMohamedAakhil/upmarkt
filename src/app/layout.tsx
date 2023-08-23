@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
+import { ClerkProvider } from '@clerk/nextjs'
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,6 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body
         className={twMerge(
@@ -29,5 +31,7 @@ export default function RootLayout({
         {children}
       </body>
     </html>
+    </ClerkProvider>
+
   );
 }
