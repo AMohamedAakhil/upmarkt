@@ -2,7 +2,8 @@ import { prisma } from "@/server/db";
 import { IncomingHttpHeaders } from "http";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { Webhook, WebhookRequiredHeaders } from "svix";
+import { Webhook } from "svix";
+import type { WebhookRequiredHeaders } from "svix";
 
 const webhookSecret = process.env.VERCEL_WEBHOOK_SECRET || "";
 
