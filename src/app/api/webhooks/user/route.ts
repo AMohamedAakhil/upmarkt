@@ -4,12 +4,13 @@ import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 import type { WebhookRequiredHeaders } from "svix";
 import type { IncomingHttpHeaders } from "http";
+import type { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
 
 const webhookSecret = process.env.VERCEL_WEBHOOK_SECRET || "";
 
 async function handler(request: Request) {
   const payload: JSON = await request.json();
-  const headersList = headers();
+  const headersList: ReadonlyHeaders = headers();
   const heads = {
     "svix-id": headersList.get("svix-id"),
     "svix-timestamp": headersList.get("svix-timestamp"),
