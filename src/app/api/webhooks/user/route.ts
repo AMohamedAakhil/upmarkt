@@ -8,7 +8,7 @@ import type { IncomingHttpHeaders } from "http";
 const webhookSecret = process.env.VERCEL_WEBHOOK_SECRET || "";
 
 async function handler(request: Request) {
-  const payload = await request.json();
+  const payload: JSON = await request.json();
   const headersList = headers();
   const heads = {
     "svix-id": headersList.get("svix-id"),
