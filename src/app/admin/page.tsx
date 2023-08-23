@@ -18,7 +18,8 @@ const Admin = () => {
         }
       };
 
-      createNewOrder();
+      void createNewOrder();
+
   return (
     <div>Admin</div>
   )
