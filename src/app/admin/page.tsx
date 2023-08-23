@@ -1,24 +1,14 @@
 import React from 'react'
 import { api } from "@/trpc/server";
 
-const Admin = async () => {
-    try {
-        const result = await api.order.create.mutate({
-          userId: "29292",
-          status: "Created",
-          total: 100,
-          addressId: "Lol"
-        })
-        console.log("New order created:", result);
-
-
-      } catch (error) {
-        console.error("Error creating new order:", error);
-      }
+export default function Admin() {
 
   return (
-    <div>Admin</div>
+    <div className="p-5">
+        <h1 className="text-xl mb-5">Admin Page</h1>
+        <div>
+
+        </div>
+    </div>
   )
 }
-
-export default Admin
