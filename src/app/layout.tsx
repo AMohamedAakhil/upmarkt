@@ -20,8 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
     <html lang="en">
+          <ClerkProvider>
+
       <body
         className={twMerge(
           "bg-background font-sans text-foreground",
@@ -30,8 +31,9 @@ export default function RootLayout({
       >
         {children}
       </body>
+      </ClerkProvider>
+
     </html>
-    </ClerkProvider>
 
   );
 }

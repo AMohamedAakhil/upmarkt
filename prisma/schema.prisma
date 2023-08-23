@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id                 String           @id @default(cuid())
-  externalId        String           @unique
+  clerkId         String           @unique
   attributes Json 
   reviews            CustomerReview[]
   orders             Order[]

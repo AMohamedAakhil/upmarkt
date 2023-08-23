@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook, WebhookRequiredHeaders } from "svix";
 
-const webhookSecret = process.env.WEBHOOK_SECRET || "";
+const webhookSecret = process.env.VERCEL_WEBHOOK_SECRET || "";
 
 async function handler(request: Request) {
   const payload = await request.json();
@@ -25,22 +25,22 @@ async function handler(request: Request) {
     ) as Event;
   } catch (err) {
     console.error((err as Error).message);
-    return NextResponse.json({}, { status: 400 });
+    return NextResponse.json({err}, { status: 400 });
   }
 
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, ...attributes } = evt.data;
-
-    await prisma.user.upsert({
-      where: { externalId: id as string },
-      create: {
-        externalId: id as string,
-        attributes,
+    await prisma.user.create({
+      data: {
+        clerkId: id as string,
+        attributes: attributes,
       },
-      update: { attributes },
-    });
+    })
+
   }
+
+  return NextResponse.json({}, { status: 200 });
 }
 
 type EventType = "user.created" | "user.updated" | "*";
