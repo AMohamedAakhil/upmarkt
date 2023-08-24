@@ -117,9 +117,9 @@ model Product {
   name                           String
   description                    String
   warranty                       String
-  categoryId                       String
-  subCategoryId                    String
-  subSubCategoryId                 String?
+  categories                     StoreCategory[]
+  subCategories              StoreSubCategory[]
+  subSubCategories                 StoreSubSubCategory[]
   productCode                    String
   brand                          String
   unit                           String
@@ -143,7 +143,7 @@ model Product {
   metaTitle                      String
   metaDescription                String
   metaImageUrl                   String
-  banner                         Banner[]
+  banners                         Banner[]
   reviews                        CustomerReview[]
   usersInWishlist                User[]           @relation("usersInWishlist")
   usersInCart                    User[]           @relation("usersInCart")
@@ -206,9 +206,10 @@ model StoreCategory {
   name           String
   priorityNumber Int
   imageUrl       String
-  store          Store              @relation(fields: [storeId], references: [id])
-  storeId        String
+  store          Store?              @relation(fields: [storeId], references: [id])
+  storeId        String?
   subCategories  StoreSubCategory[]
+  products      Product[]
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
 
@@ -220,13 +221,13 @@ model StoreSubCategory {
   name             String
   priorityNumber   Int
   imageUrl         String
-  category         StoreCategory         @relation(fields: [categoryId], references: [id])
-  categoryId       String
+  category         StoreCategory?         @relation(fields: [categoryId], references: [id])
+  categoryId       String?
   subSubCategories StoreSubSubCategory[]
-  mainCategoryName String
+  mainCategoryName String?
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt
-
+  products        Product[]
   @@index([categoryId])
 }
 
@@ -235,9 +236,10 @@ model StoreSubSubCategory {
   name            String
   priorityNumber  Int
   imageUrl        String
-  subCategory     StoreSubCategory @relation(fields: [subCategoryId], references: [id])
-  subCategoryId   String
-  subCategoryName String
+  subCategory     StoreSubCategory? @relation(fields: [subCategoryId], references: [id])
+  subCategoryId   String?
+  subCategoryName String?
+  products        Product[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 

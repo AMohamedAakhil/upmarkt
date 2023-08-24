@@ -1,15 +1,15 @@
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
+import { api } from "@/trpc/server";
 
 export default async function Home() {
-  /*
+  const categoryRes = await api.category.createCategory.mutate({
+      name: "test",
+      priorityNumber: 1,
+      imageUrl: "test",
+  })
 
-  
-
-  */
-  const user = await currentUser();
-  const id = JSON.parse(JSON.stringify(user)).id
-  console.log(id)
+  console.log(categoryRes);
   return (
     <main className="">
       <UserButton afterSignOutUrl="/"/>
