@@ -28,21 +28,20 @@ async function handler(request: Request) {
     ) as Event;
   } catch (err) {
     console.error((err as Error).message);
-    return NextResponse.json({err}, { status: 400 });
+    return NextResponse.json({ err }, { status: 400 });
   }
 
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, ...attributes } = evt.data;
-    const res =  await prisma.user.create({
+    const res = await prisma.user.create({
       data: {
         clerkId: id as string,
         attributes: attributes,
       },
-    })
+    });
 
     console.log(res);
-
   }
 
   return NextResponse.json({}, { status: 200 });

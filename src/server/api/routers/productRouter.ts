@@ -5,72 +5,72 @@ export const createProduct = publicProcedure
   .input(productSchema)
   .mutation(async ({ ctx, input }) => {
     const categories = await ctx.prisma.storeCategory.findMany({
-      where : {
+      where: {
         id: {
-          in: input.categoryId
-        }
-      }
+          in: input.categoryId,
+        },
+      },
     });
     const subcategories = await ctx.prisma.storeCategory.findMany({
-      where : {
+      where: {
         id: {
-          in: input.subCategoryId
-        }
-      }
+          in: input.subCategoryId,
+        },
+      },
     });
     const subsubcategories = await ctx.prisma.storeSubSubCategory.findMany({
-      where : {
+      where: {
         id: {
-          in: input.subSubCategoryId
-        }
-      }
+          in: input.subSubCategoryId,
+        },
+      },
     });
     const colors = await ctx.prisma.color.findMany({
-      where : {
+      where: {
         id: {
-          in: input.colorsId
-        }
-      }
-    })
+          in: input.colorsId,
+        },
+      },
+    });
     const attributes = await ctx.prisma.attribute.findMany({
-      where : {
+      where: {
         id: {
-          in: input.attributesId
-        }
-      }
+          in: input.attributesId,
+        },
+      },
     });
     const variants = await ctx.prisma.variant.findMany({
-      where : {
+      where: {
         id: {
-          in: input.variantsId
-        }
-      }
+          in: input.variantsId,
+        },
+      },
     });
     const images = await ctx.prisma.variant.findMany({
-      where : {
+      where: {
         id: {
-          in: input.imagesId
-        }
-      }
+          in: input.imagesId,
+        },
+      },
     });
     const banners = await ctx.prisma.banner.findMany({
       where: {
         id: {
-          in: input.bannersId
-        }
-      }
-    })
+          in: input.bannersId,
+        },
+      },
+    });
     const reviews = await ctx.prisma.customerReview.findMany({
       where: {
         id: {
-          in: input.reviews
-        }
-      }
-    })
+          in: input.reviews,
+        },
+      },
+    });
     const store = await ctx.prisma.store.findUnique({
       where: {
-        id: input.storeId
-      }
+        id: input.storeId,
+      },
     });
 
     const finalRes = await ctx.prisma.product.create({
@@ -80,24 +80,24 @@ export const createProduct = publicProcedure
         description: input.description,
         warranty: input.warranty,
         categories: {
-          connect: categories.map(category => ({ id: category.id }))
+          connect: categories.map((category) => ({ id: category.id })),
         },
         subCategories: {
-          connect: subcategories.map(subcategory => ({ id: subcategory.id }))
-
+          connect: subcategories.map((subcategory) => ({ id: subcategory.id })),
         },
         subSubCategories: {
-          connect: subsubcategories.map(subsubcategory => ({ id: subsubcategory.id }))
-
+          connect: subsubcategories.map((subsubcategory) => ({
+            id: subsubcategory.id,
+          })),
         },
         productCode: input.productCode,
         brand: input.brand,
         unit: input.unit,
         colors: {
-          connect: colors.map(color => ({ id: color.id }))
+          connect: colors.map((color) => ({ id: color.id })),
         },
         attributes: {
-          connect: attributes.map(attribute => ({ id: attribute.id }))
+          connect: attributes.map((attribute) => ({ id: attribute.id })),
         },
         unitPrice: input.unitPrice,
         purchasePrice: input.purchasePrice,
@@ -105,7 +105,7 @@ export const createProduct = publicProcedure
         discount: input.discount,
         typeOfDiscount: input.typeOfDiscount,
         variants: {
-          connect: variants.map(variant => ({ id: variant.id }))
+          connect: variants.map((variant) => ({ id: variant.id })),
         },
         totalQuantity: input.totalQuantity,
         minimumQuantity: input.minimumQuantity,
@@ -114,7 +114,7 @@ export const createProduct = publicProcedure
         shippingCostMultiplyByQuantity: input.shippingCostMultiplyByQuantity,
         status: input.status,
         images: {
-          connect: images.map(image => ({ id: image.id }))
+          connect: images.map((image) => ({ id: image.id })),
         },
         thumbnailUrl: input.thumbnailUrl,
         youtubeLink: input.youtubeLink,
@@ -122,27 +122,26 @@ export const createProduct = publicProcedure
         metaDescription: input.metaDescription,
         metaImageUrl: input.metaImageUrl,
         reviews: {
-          connect: reviews.map(review => ({ id: review.id }))
+          connect: reviews.map((review) => ({ id: review.id })),
         },
         banners: {
-          connect: banners.map(banner => ({ id: banner.id }))
+          connect: banners.map((banner) => ({ id: banner.id })),
         },
         store: {
           connect: {
             // eslint-disable-next-line no-use-before-define
-            id: store!.id
-          }
+            id: store!.id,
+          },
         },
-    }});
+      },
+    });
 
-    console.log(finalRes)
-
+    console.log(finalRes);
   });
 
-export const getProducts = publicProcedure
-  .query(async ({ ctx }) => {
-    return ctx.prisma.product.findMany({});
-  });
+export const getProducts = publicProcedure.query(async ({ ctx }) => {
+  return ctx.prisma.product.findMany({});
+});
 
 export const productRouter = createTRPCRouter({
   create: createProduct,

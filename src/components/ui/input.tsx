@@ -1,12 +1,12 @@
 /* eslint-disable */
 
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 // tslint:disable-next-line
 export interface InputProps
-// tslint:disable-next-line
+  // tslint:disable-next-line
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 // tslint:disable-next-line
@@ -22,9 +22,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         {...props}
       />
-    )
+    );
   }
-)
-Input.displayName = "Input"
+);
+Input.displayName = "Input";
 
-export { Input }
+export { Input };
