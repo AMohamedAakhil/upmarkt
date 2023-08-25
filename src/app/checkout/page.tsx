@@ -5,14 +5,14 @@ import { api } from "@/trpc/client";
 import { useState } from 'react';
 
 interface Order {
-  id: String;
+  id: string;
   date: Date;
   userId: String;
   status: String;
-  total: Number;
+  total: number;    
   createdAt: Date;
   updatedAt: Date;
-  addressId: String;
+  addressId: string;
 }
 
 
