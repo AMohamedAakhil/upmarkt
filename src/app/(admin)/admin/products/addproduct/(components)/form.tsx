@@ -35,6 +35,7 @@ const ProductForm = () => {
   function onSubmit(values: z.infer<typeof productSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    console.log("submitted")
     console.log(values);
   }
 
@@ -82,7 +83,7 @@ const ProductForm = () => {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button className="bg-black text-white hover:bg-slate-800" type="submit">Submit</Button>
         </form>
       </Form>
     </div>
