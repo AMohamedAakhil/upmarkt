@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { currentUser } from "@clerk/nextjs";

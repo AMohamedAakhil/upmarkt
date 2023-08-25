@@ -4,9 +4,21 @@ import React from 'react'
 import { api } from "@/trpc/client";
 import { useState } from 'react';
 
+interface Order {
+  id: String;
+  date: Date;
+  userId: String;
+  status: String;
+  total: Number;
+  createdAt: Date;
+  updatedAt: Date;
+  addressId: String;
+}
+
+
 export default function Checkout() {
     const [loading, setLoading] = useState(false);
-    const [order, setOrder] = useState<any>(null);
+    const [order, setOrder] = useState<Order | null | undefined>(null);
       const handleOrder = async() => {
         try {
             setLoading(true);
@@ -22,8 +34,8 @@ export default function Checkout() {
                 country: "India",
               }
             })
-            console.log(result);
             setOrder(result);
+            console.log(order)
             setLoading(false);
           } catch (error) {
             console.error("Error creating new order:", error);

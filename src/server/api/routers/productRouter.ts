@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { productSchema } from "../types";
 
@@ -130,10 +129,13 @@ export const createProduct = publicProcedure
         },
         store: {
           connect: {
+            // eslint-disable-next-line no-use-before-define
             id: store!.id
           }
         },
     }});
+
+    console.log(finalRes)
 
   });
 

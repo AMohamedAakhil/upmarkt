@@ -2,9 +2,12 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+// tslint:disable-next-line
 export interface InputProps
+// tslint:disable-next-line
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
+// tslint:disable-next-line
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     return (
