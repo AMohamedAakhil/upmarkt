@@ -27,65 +27,134 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+
 const ProductForm = () => {
   const form = useForm<z.infer<typeof productSchema>>({
-    resolver: zodResolver(productSchema),
+    // resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: "",
+    },
   });
 
   function onSubmit(values: z.infer<typeof productSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log("submitted")
+    console.log("submitted");
     console.log(values);
   }
 
+  const Inputfields = ["name", "description", "warranty"];
+
   return (
     <div className="">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <>
-                <FormItem>
-                  <FormLabel>Product Name</FormLabel>
-                  <FormControl>
-                    <Select {...field}>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Theme" />
-                      </SelectTrigger>
+      <Card className=" border-black">
+        <CardHeader>
+          <CardTitle>Product Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="originType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a verified email to display" />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
+                        <SelectItem value="m@example.com">
+                          m@example.com
+                        </SelectItem>
+                        <SelectItem value="m@google.com">
+                          m@google.com
+                        </SelectItem>
+                        <SelectItem value="m@support.com">
+                          m@support.com
+                        </SelectItem>
                       </SelectContent>
                     </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              </>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="originType"
-            render={({ field }) => (
-              <>
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Origin" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              </>
-            )}
-          />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <FormLabel>Product Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Origin" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
 
-          <Button className="bg-black text-white hover:bg-slate-800" type="submit">Submit</Button>
-        </form>
-      </Form>
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Enter Description" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="warranty"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <FormLabel>Warranty</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter Warranty Details"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+
+              <Button
+                className="bg-black text-white hover:bg-slate-800"
+                type="submit"
+              >
+                Submit
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
