@@ -4,27 +4,6 @@ import { productSchema } from "../types";
 export const createProduct = publicProcedure
   .input(productSchema)
   .mutation(async ({ ctx, input }) => {
-    const categories = await ctx.prisma.storeCategory.findMany({
-      where: {
-        id: {
-          in: input.categoryId,
-        },
-      },
-    });
-    const subcategories = await ctx.prisma.storeCategory.findMany({
-      where: {
-        id: {
-          in: input.subCategoryId,
-        },
-      },
-    });
-    const subsubcategories = await ctx.prisma.storeSubSubCategory.findMany({
-      where: {
-        id: {
-          in: input.subSubCategoryId,
-        },
-      },
-    });
     const colors = await ctx.prisma.color.findMany({
       where: {
         id: {
@@ -80,15 +59,13 @@ export const createProduct = publicProcedure
         description: input.description,
         warranty: input.warranty,
         categories: {
-          connect: categories.map((category) => ({ id: category.id })),
+          connect: {id: input.categoryId},
         },
         subCategories: {
-          connect: subcategories.map((subcategory) => ({ id: subcategory.id })),
+          connect: {id: input.subCategoryId},
         },
         subSubCategories: {
-          connect: subsubcategories.map((subsubcategory) => ({
-            id: subsubcategory.id,
-          })),
+          connect: {id: input.subSubCategoryId},
         },
         productCode: input.productCode,
         brand: input.brand,

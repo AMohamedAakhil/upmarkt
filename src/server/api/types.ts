@@ -5,9 +5,9 @@ export const productSchema = z.object({
   name: z.string(),
   description: z.string(),
   warranty: z.string(),
-  categoryId: z.array(z.string()),
-  subCategoryId: z.array(z.string()),
-  subSubCategoryId: z.array(z.string()),
+  categoryId: z.string(),
+  subCategoryId: z.string(),
+  subSubCategoryId: z.string(),
   productCode: z.string(),
   brand: z.string(),
   unit: z.string(),
@@ -37,4 +37,24 @@ export const productSchema = z.object({
   colorsId: z.array(z.string()),
   attributesId: z.array(z.string()),
   variantsId: z.array(z.string()),
+});
+
+export const categorySchema = z.object({
+  name: z.string(),
+  priorityNumber: z.number(),
+  imageUrl: z.string(),
+})
+
+export const subCategorySchema = z.object({
+  name: z.string(),
+  priorityNumber: z.number(),
+  imageUrl: z.string(),
+  categoryId: z.string(),
+})
+
+export const subSubCategorySchema = z.object({
+  name: z.string(),
+  priorityNumber: z.number(),
+  imageUrl: z.string(),
+  subCategoryId: z.string(),
 });

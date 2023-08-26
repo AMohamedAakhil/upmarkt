@@ -117,9 +117,12 @@ model Product {
   name                           String
   description                    String
   warranty                       String
-  categories                     StoreCategory[]
-  subCategories              StoreSubCategory[]
-  subSubCategories                 StoreSubSubCategory[]
+  categories                     StoreCategory? @relation(fields: [categoryId], references: [id])
+  categoryId                     String?
+  subCategories              StoreSubCategory? @relation(fields: [subCategoryId], references: [id])
+  subCategoryId                  String?
+  subSubCategories                 StoreSubSubCategory? @relation(fields: [subSubCategoryId], references: [id])
+  subSubCategoryId                  String?
   productCode                    String
   brand                          String
   unit                           String
@@ -154,6 +157,10 @@ model Product {
   updatedAt                      DateTime         @updatedAt
 
   @@index([storeId])
+    @@index([categoryId])
+  @@index([subCategoryId])
+  @@index([subSubCategoryId])
+
 }
 
 model Variant {
@@ -224,7 +231,6 @@ model StoreSubCategory {
   category         StoreCategory?         @relation(fields: [categoryId], references: [id])
   categoryId       String?
   subSubCategories StoreSubSubCategory[]
-  mainCategoryName String?
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt
   products        Product[]
@@ -238,7 +244,6 @@ model StoreSubSubCategory {
   imageUrl        String
   subCategory     StoreSubCategory? @relation(fields: [subCategoryId], references: [id])
   subCategoryId   String?
-  subCategoryName String?
   products        Product[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt

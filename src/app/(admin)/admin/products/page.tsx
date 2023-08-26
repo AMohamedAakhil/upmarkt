@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Products = () => {
   return (
-    <div className="flex w-full p-5">
+    <div className="flex flex-col w-full p-5">
       <h1 className="mb-5 text-xl">Products</h1>
       <Button>
         <Link href="/admin/products/addproduct">Add Product</Link>
