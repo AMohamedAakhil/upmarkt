@@ -49,12 +49,10 @@ export const subCategorySchema = z.object({
   name: z.string(),
   priorityNumber: z.number(),
   imageUrl: z.string(),
-  categoryId: z.string(),
 })
 
 export const subSubCategorySchema = z.object({
   name: z.string(),
   priorityNumber: z.number(),
   imageUrl: z.string(),
-  subCategoryId: z.string(),
 });
