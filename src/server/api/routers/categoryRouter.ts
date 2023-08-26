@@ -8,7 +8,7 @@ export const createCategory = publicProcedure
     const res = await ctx.prisma.storeCategory.create({
       data: {
         name: input.name,
-        priorityNumber: input.priorityNumber,
+        priorityNumber: parseInt(input.priorityNumber),
         imageUrl: input.imageUrl,
       },
     });
@@ -22,7 +22,7 @@ export const createCategory = publicProcedure
     const res = await ctx.prisma.storeSubCategory.create({
       data: {
         name: input.name,
-        priorityNumber: input.priorityNumber,
+        priorityNumber: parseInt(input.priorityNumber),
         imageUrl: input.imageUrl,
         category: { connect: { id: input.categoryId } }, // Connect to the parent category using categoryId
       },
@@ -37,7 +37,7 @@ export const createSubSubCategory = publicProcedure
     const res = await ctx.prisma.storeSubSubCategory.create({
       data: {
         name: input.name,
-        priorityNumber: input.priorityNumber,
+        priorityNumber: parseInt(input.priorityNumber),
         imageUrl: input.imageUrl,
         subCategory: { connect: { id: input.subCategoryId } }, // Connect to the parent subCategory using subCategoryId
       },

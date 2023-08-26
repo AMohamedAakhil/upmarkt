@@ -4,11 +4,6 @@ import React, { useState, useEffect } from "react";
 import { api } from "@/trpc/client";
 import { productSchema } from "@/server/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { categorySchema, subCategorySchema, subSubCategorySchema } from "@/server/api/types";
-type categoryType = z.infer<typeof categorySchema>;
-type subCategoryType = z.infer<typeof subCategorySchema>;
-type subSubCategoryType = z.infer<typeof subSubCategorySchema>;
-
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 
@@ -58,35 +53,9 @@ const ProductForm = () => {
     console.log("submitted");
     console.log(values);
   }
-  const [categories, setCategories] = useState<categoryType[] | undefined | null>(null);
-  const [subCategories, setSubCategories] = useState<subCategoryType[] | undefined | null>();
-  const [subSubCategories, setSubSubCategories] = useState<subSubCategoryType[] | undefined | null>();
-
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState("");
 
 
-  useEffect(() => {
-    const getCategories = async() => {
-      const categoriesRes = await api.category.getCategories.query();
-      setCategories(categoriesRes);
-    }
 
-    const getSubCategories = async() => {
-      const subCategoriesRes = await api.category.getSubCategories.query();
-      setSubCategories(subCategoriesRes);
-    }
-
-    const getSubSubCategories = async() => {
-      const subSubCategoriesRes = await api.category.getSubSubCategories.query();
-      setSubSubCategories(subSubCategoriesRes);
-    }
-    getCategories();
-    getSubCategories();
-    getSubSubCategories();
-  }, []);
-
-  console.log(categories)
   return (
     <div className="">
       <Card className="">
