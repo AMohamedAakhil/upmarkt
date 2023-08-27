@@ -16,14 +16,20 @@ import { useCategoryModal } from "@/hooks/use-category-modal";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast"
 import { ToastAction } from "../ui/toast";
+import { useCategory } from "@/hooks/use-categories";
 const formSchema = z.object({
   name: z.string().min(1),
 });
+
+import { shallow } from 'zustand/shallow'
+
 
 export const CategoryModal = () => {
   const storeModal = useCategoryModal();
   const router = useRouter();
   const { toast } = useToast()
+  const setCategories = useCategory((state) => state.setCategories, shallow);
+  const categories = useCategory((state) => state.categories, shallow);
 
   const [loading, setLoading] = useState(false);
 
@@ -32,16 +38,20 @@ export const CategoryModal = () => {
     defaultValues: {
       name: "",
     imageUrl: "",
+    priorityNumber: "",
     },
   });
   const {formState} = form
+  const onFetch = useCategoryModal((state) => state.onFetch);
 
   const onSubmit = async (values: z.infer<typeof categorySchema>) => {
     try {
       setLoading(true);
       const response = await api.category.createCategory.mutate(values);
+      setCategories([...categories, response]);
       console.log(response);
       storeModal.onClose();
+      onFetch();
       toast({
         title: `Created Category: ${values.name}`,
         description: `With Priority Count Set To ${values.priorityNumber}`,
@@ -114,7 +124,7 @@ export const CategoryModal = () => {
                   <Button disabled={loading} variant="outline" onClick={storeModal.onClose}>
                     Cancel
                   </Button>
-                  <Button disabled={loading}  type="submit">Create Category</Button>
+                  <Button disabled={loading} onClick={() => {console.log(formState.errors)}} type="submit">Create Category</Button>
                 </div>
               </form>
             </Form>

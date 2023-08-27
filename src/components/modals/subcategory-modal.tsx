@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast"
 import { ToastAction } from "../ui/toast";
 import { useSubCategoryModal } from "@/hooks/use-sub-category-modal";
+import { shallow } from 'zustand/shallow'
+import { useSubcategory } from "@/hooks/use-subcategories";
 
 export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
   const storeModal = useSubCategoryModal();
@@ -25,18 +27,22 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
   const subCategoryForm = useForm<z.infer<typeof subCategorySchema>>({
     resolver: zodResolver(subCategorySchema),
     defaultValues: {
+      categoryId: "",
       name: "",
-        priorityNumber: "",
+      priorityNumber: "",
     imageUrl: "",
     },
   });
   const {formState} = subCategoryForm;
+  const setSubcategories = useSubcategory((state) => state.setSubcategories, shallow);
+  const subcategories = useSubcategory((state) => state.subcategories, shallow);
   const onSubmit = async (values: z.infer<typeof subCategorySchema>) => {
     try {
       console.log("start")
       setLoading(true);
-      Object.assign(values, {categoryId: categoryId})
+      values.categoryId = categoryId;
       const response = await api.category.createSubCategory.mutate(values);
+      setSubcategories([...subcategories, response]);
       console.log(response);
       storeModal.onClose();
       toast({
@@ -56,15 +62,6 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
     }
   };
 
-  const onErrors = async (values: z.infer<typeof subCategorySchema>) => {
-    console.log()
-    toast({
-      variant: "destructive",
-      title: "Uh oh! Something went wrong.",
-      description: "There was a problem with your request.",
-      action: <ToastAction altText="Try again">Try again</ToastAction>,
-    })
-  }
 
   return (
     <Modal
@@ -77,7 +74,7 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
         <div className="space-y-8 py-2 pb-4">
           <div className="space-y-5">
             <Form {...subCategoryForm}>
-              <form onSubmit={subCategoryForm.handleSubmit(onSubmit, onErrors)}>
+              <form onSubmit={subCategoryForm.handleSubmit(onSubmit)}>
                 <FormField
                   control={subCategoryForm.control}
                   name="name"
@@ -121,10 +118,10 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
                   <Button disabled={loading} type="button" variant="outline" onClick={storeModal.onClose}>
                     Cancel
                   </Button>
-                  <Button onClick={() => console.log(formState)} disabled={loading}  type="submit">Create Subcategory</Button>
+                  <Button onClick={() => console.log(formState.errors)} disabled={loading}  type="submit">Create Subcategory</Button>
                 </div>
               </form>
-            </Form>
+            </Form> 
           </div>
         </div>
       </div>

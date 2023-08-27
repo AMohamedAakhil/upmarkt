@@ -6,7 +6,6 @@ import { CategoryModal } from "@/components/modals/category-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
-
   useEffect(() => {
     setIsMounted(true);
   }, []);

@@ -6,7 +6,6 @@ import { productSchema } from "@/server/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -37,15 +36,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { ModalProvider } from "@/providers/modal-provider";
+import { useCategoryModal } from "@/hooks/use-category-modal";
+import { useSubCategoryModal } from "@/hooks/use-sub-category-modal";
+import { SubCategoryModalProvider } from "@/providers/sub-category-modal-provider";
+import { useCategory } from "@/hooks/use-categories";
+import { useSubcategory } from "@/hooks/use-subcategories";
 
 const ProductForm = () => {
   const {theme} = useTheme();
+
   const form = useForm<z.infer<typeof productSchema>>({
     // resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
+
     },
   });
+  const {getValues} = form;
+  const formValues = getValues();
+  const onCategoryOpen = useCategoryModal((state) => state.onOpen);
+  const onSubcategoryOpen = useSubCategoryModal((state) => state.onOpen);
 
   function onSubmit(values: z.infer<typeof productSchema>) {
     // Do something with the form values.
@@ -53,11 +64,36 @@ const ProductForm = () => {
     console.log("submitted");
     console.log(values);
   }
+  const categories = useCategory((state) => state.categories);
+  const setCategories = useCategory((state) => state.setCategories);
+  const subCategories = useSubcategory((state) => state.subcategories);
+  const setSubCategories = useSubcategory((state) => state.setSubcategories);
 
+  useEffect(() => {
+    const getCategories = async () => {
+      const categoriesRes = await api.category.getCategories.query()  
+      setCategories(categoriesRes);
+      console.log(categories)
+    }
+  
+    getCategories();
+  }, []);
 
-
+  useEffect(() => {
+    const getSubCategories = async () => {
+      console.log(formValues)
+      const subCategoriesRes = await api.category.getSubCategories.query({categoryId: formValues.categoryId ? formValues.categoryId : ""})
+      setSubCategories(subCategoriesRes);
+      console.log(subCategories)
+    }
+  
+    getSubCategories();
+  }, [formValues.categoryId]);
+  
   return (
     <div className="">
+              <ModalProvider />
+
       <Card className="">
         <CardHeader>
           <CardTitle>Product Details</CardTitle>
@@ -93,6 +129,8 @@ const ProductForm = () => {
                   </FormItem>
                 )}
               />
+
+
               <FormField
                 control={form.control}
                 name="name"
@@ -143,6 +181,79 @@ const ProductForm = () => {
                   </>
                 )}
               />
+              
+            <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Product Category</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Category of Product" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className={theme == "light" ? "bg-white" : "bg-black"}>
+                      {
+    categories.map((category) => (
+        <SelectItem key={category.id} value={category.id}>
+          {category.name}
+        </SelectItem>
+      ))
+}
+
+                        <Button onClick={onCategoryOpen} className={theme === "light" ? "bg-white text-black w-full hover:bg-slate-100" : "bg-black text-white w-full hover:bg-slate-900"}>
+                          Create New Category
+                        </Button>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            {
+              formValues.categoryId ? <>
+              <SubCategoryModalProvider categoryId={formValues.categoryId} />
+            <FormField
+                control={form.control}
+                name="subCategoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Product Subcategory</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Subcategory of Product" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className={theme == "light" ? "bg-white" : "bg-black"}>
+                        {
+                          subCategories.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          )
+                          )
+                        }
+                        <Button onClick={onSubcategoryOpen} className={theme === "light" ? "bg-white text-black w-full hover:bg-slate-100" : "bg-black text-white w-full hover:bg-slate-900"}>
+                          Create New Subcategory
+                        </Button>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              </> : <></>
+            }
+             
 
               <Button
                 className={theme == "light" ? "bg-black text-white hover:bg-slate-800 rounded-lg" : "bg-white text-black hover:bg-slate-300"}

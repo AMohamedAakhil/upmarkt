@@ -50,8 +50,21 @@ export const getCategories = publicProcedure.query(async ({ ctx }) => {
   return ctx.prisma.storeCategory.findMany({});
 });
 
-export const getSubCategories = publicProcedure.query(async ({ ctx }) => {
-  return ctx.prisma.storeSubCategory.findMany({});
+export const getLastCategory = publicProcedure.query(async ({ ctx }) => {
+  return ctx.prisma.storeCategory.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    },
+    take: 1
+  });
+});
+
+export const getSubCategories = publicProcedure.input(z.object({categoryId: z.string()})).query(async ({ ctx, input }) => {
+  return ctx.prisma.storeSubCategory.findMany({
+    where: {
+      categoryId: input.categoryId
+    }
+  });
 });
 
 export const getSubSubCategories = publicProcedure.query(async ({ ctx }) => {
@@ -63,6 +76,7 @@ export const categoryRouter = createTRPCRouter({
   createSubCategory: createSubCategory,
   createSubSubCategory: createSubSubCategory,
   getCategories: getCategories,
+  getLastCategory: getLastCategory,
   getSubCategories: getSubCategories,
   getSubSubCategories: getSubSubCategories,
 });

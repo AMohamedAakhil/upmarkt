@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import AdminNavbar from "./(components)/admin-navbar";
+import { ModalProvider } from "@/providers/modal-provider";
 
 const inter = Inter({
   subsets: ["latin"],
