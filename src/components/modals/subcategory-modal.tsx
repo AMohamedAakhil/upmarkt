@@ -35,14 +35,14 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
   });
   const {formState} = subCategoryForm;
   const setSubcategories = useSubcategory((state) => state.setSubcategories, shallow);
-  const subcategories = useSubcategory((state) => state.subcategories, shallow);
+  const subcategories = api.category.getSubCategories.query({categoryId: categoryId})
   const onSubmit = async (values: z.infer<typeof subCategorySchema>) => {
     try {
       console.log("start")
       setLoading(true);
       values.categoryId = categoryId;
       const response = await api.category.createSubCategory.mutate(values);
-      setSubcategories([...subcategories, response]);
+      setSubcategories([...await subcategories, response]);
       console.log(response);
       storeModal.onClose();
       toast({

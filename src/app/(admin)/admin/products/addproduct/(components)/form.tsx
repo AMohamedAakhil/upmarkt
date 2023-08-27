@@ -53,8 +53,8 @@ const ProductForm = () => {
 
     },
   });
-  const {getValues} = form;
-  const formValues = getValues();
+  const {watch} = form;
+  const categoryId = watch("categoryId");
   const onCategoryOpen = useCategoryModal((state) => state.onOpen);
   const onSubcategoryOpen = useSubCategoryModal((state) => state.onOpen);
 
@@ -81,14 +81,13 @@ const ProductForm = () => {
 
   useEffect(() => {
     const getSubCategories = async () => {
-      console.log(formValues)
-      const subCategoriesRes = await api.category.getSubCategories.query({categoryId: formValues.categoryId ? formValues.categoryId : ""})
+      const subCategoriesRes = await api.category.getSubCategories.query({categoryId: categoryId ? categoryId : ""})
       setSubCategories(subCategoriesRes);
       console.log(subCategories)
     }
   
     getSubCategories();
-  }, [formValues.categoryId]);
+  }, [categoryId]);
   
   return (
     <div className="">
@@ -216,8 +215,8 @@ const ProductForm = () => {
                 )}
               />
             {
-              formValues.categoryId ? <>
-              <SubCategoryModalProvider categoryId={formValues.categoryId} />
+              categoryId ? <>
+              <SubCategoryModalProvider categoryId={categoryId} />
             <FormField
                 control={form.control}
                 name="subCategoryId"
