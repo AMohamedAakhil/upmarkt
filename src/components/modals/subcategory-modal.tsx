@@ -25,6 +25,7 @@ import { ToastAction } from "../ui/toast";
 import { useSubCategoryModal } from "@/hooks/use-sub-category-modal";
 import { shallow } from "zustand/shallow";
 import { useSubcategory } from "@/hooks/use-subcategories";
+import ImageUpload from "../ui/image-upload";
 
 export const SubCategoryModal = ({ categoryId }: { categoryId: string }) => {
   const storeModal = useSubCategoryModal();
@@ -41,7 +42,7 @@ export const SubCategoryModal = ({ categoryId }: { categoryId: string }) => {
       imageUrl: "",
     },
   });
-  const { formState } = subCategoryForm;
+  const { formState, setValue } = subCategoryForm;
   const setSubcategories = useSubcategory(
     (state) => state.setSubcategories,
     shallow
@@ -71,6 +72,9 @@ export const SubCategoryModal = ({ categoryId }: { categoryId: string }) => {
       });
     } finally {
       setLoading(false);
+      setValue("name", "");
+      setValue("imageUrl", "");
+      setValue("priorityNumber", "");
     }
   };
 
@@ -126,12 +130,13 @@ export const SubCategoryModal = ({ categoryId }: { categoryId: string }) => {
                   name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Image URL</FormLabel>
+                      <FormLabel>Image Upload</FormLabel>
                       <FormControl>
-                        <Input
+                        <ImageUpload
+                          value={field.value ? [field.value] : []}
                           disabled={loading}
-                          placeholder="Image URL"
-                          {...field}
+                          onChange={(url) => field.onChange(url)}
+                          onRemove={() => field.onChange("")}
                         />
                       </FormControl>
                       <FormMessage />

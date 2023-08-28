@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { api } from "@/trpc/server";
 import { SubCategoryModal } from "@/components/modals/subcategory-modal";
 import { useSubCategoryModal } from "@/hooks/use-sub-category-modal";
-import { Button } from "@/ui/button";
+import { Button } from "@/components/ui/button";
 
 const SamplePage = () => {
   const [client, setClient] = useState(false);

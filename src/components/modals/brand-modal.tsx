@@ -3,12 +3,8 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/trpc/client";
-import { categorySchema } from "@/server/api/types";
-import { subCategorySchema } from "@/server/api/types";
-import { subSubCategorySchema } from "@/server/api/types";
 import { Modal } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,49 +16,46 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useCategoryModal } from "@/hooks/use-category-modal";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "../ui/toast";
-import { useCategory } from "@/hooks/use-categories";
-const formSchema = z.object({
-  name: z.string().min(1),
-});
-
+import { Brand } from "@prisma/client";
 import { shallow } from "zustand/shallow";
+import { useBrand } from "@/hooks/use-brands";
+import { useBrandModal } from "@/hooks/use-brand-modal";
 import ImageUpload from "../ui/image-upload";
 
-export const CategoryModal = () => {
-  const storeModal = useCategoryModal();
-  const router = useRouter();
+export const BrandModal = () => {
+  const storeModal = useBrandModal();
   const { toast } = useToast();
-  const setCategories = useCategory((state) => state.setCategories, shallow);
-  const categories = useCategory((state) => state.categories, shallow);
+  const setBrands = useBrand((state) => state.setBrands, shallow);
+  const brands = useBrand((state) => state.brands, shallow);
 
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof categorySchema>>({
-    resolver: zodResolver(categorySchema),
+  const brandSchema = z.object({
+    name: z.string().min(1, "Name is required"),
+    logoUrl: z.string().min(1, "Logo URL is required"),
+  });
+
+  const form = useForm<Brand>({
+    resolver: zodResolver(brandSchema),
     defaultValues: {
       name: "",
-      imageUrl: "",
-      priorityNumber: "",
+      logoUrl: "",
     },
   });
   const { formState, setValue } = form;
-  const onFetch = useCategoryModal((state) => state.onFetch);
 
-  const onSubmit = async (values: z.infer<typeof categorySchema>) => {
+  const onSubmit = async (values: Brand) => {
     try {
       setLoading(true);
-      const response = await api.category.createCategory.mutate(values);
-      setCategories([...categories, response]);
+      const response = await api.misc.createBrand.mutate(values);
+      setBrands([...brands, response]);
       console.log(response);
       storeModal.onClose();
-      onFetch();
       toast({
-        title: `Created Category: ${values.name}`,
-        description: `With Priority Count Set To ${values.priorityNumber}`,
+        title: `Created Brand: ${values.name}`,
       });
     } catch (error) {
       toast({
@@ -74,15 +67,14 @@ export const CategoryModal = () => {
     } finally {
       setLoading(false);
       setValue("name", "");
-      setValue("imageUrl", "");
-      setValue("priorityNumber", "");
+      setValue("logoUrl", "");
     }
   };
 
   return (
     <Modal
-      title="Create category"
-      description="Add a new category to add to the store."
+      title="Create Brand"
+      description="Add a new brand to the store."
       isOpen={storeModal.isOpen}
       onClose={storeModal.onClose}
     >
@@ -96,11 +88,11 @@ export const CategoryModal = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem className="mb-5">
-                      <FormLabel>Category Name</FormLabel>
+                      <FormLabel>Brand Name</FormLabel>
                       <FormControl>
                         <Input
                           disabled={loading}
-                          placeholder="Category Name"
+                          placeholder="Brand Name"
                           {...field}
                         />
                       </FormControl>
@@ -110,29 +102,10 @@ export const CategoryModal = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="priorityNumber"
-                  render={({ field }) => (
-                    <FormItem className="mb-5">
-                      <FormLabel className="mt-5">Priority Number</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={loading}
-                          type="number"
-                          placeholder="Priority Number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="imageUrl"
+                  name="logoUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Image Upload</FormLabel>
+                      <FormLabel>Upload Logo</FormLabel>
                       <FormControl>
                         <ImageUpload
                           value={field.value ? [field.value] : []}
@@ -145,7 +118,6 @@ export const CategoryModal = () => {
                     </FormItem>
                   )}
                 />
-
                 <div className="flex w-full items-center justify-end space-x-2 pt-6">
                   <Button
                     disabled={loading}
@@ -162,7 +134,7 @@ export const CategoryModal = () => {
                     }}
                     type="submit"
                   >
-                    Create Category
+                    Create Brand
                   </Button>
                 </div>
               </form>

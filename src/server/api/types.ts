@@ -36,6 +36,7 @@ export const productSchema = z.object({
   storeId: z.string(),
   colorsId: z.array(z.string()),
   attributesId: z.array(z.string()),
+  attributeValues: z.record(z.array(z.string())), // Add this line for dynamic attribute values
   variantsId: z.array(z.string()),
 });
 
