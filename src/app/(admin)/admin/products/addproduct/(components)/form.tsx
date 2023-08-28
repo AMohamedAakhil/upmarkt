@@ -44,16 +44,15 @@ import { useCategory } from "@/hooks/use-categories";
 import { useSubcategory } from "@/hooks/use-subcategories";
 
 const ProductForm = () => {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   const form = useForm<z.infer<typeof productSchema>>({
     // resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
-
     },
   });
-  const {watch} = form;
+  const { watch } = form;
   const categoryId = watch("categoryId");
   const onCategoryOpen = useCategoryModal((state) => state.onOpen);
   const onSubcategoryOpen = useSubCategoryModal((state) => state.onOpen);
@@ -71,27 +70,29 @@ const ProductForm = () => {
 
   useEffect(() => {
     const getCategories = async () => {
-      const categoriesRes = await api.category.getCategories.query()  
+      const categoriesRes = await api.category.getCategories.query();
       setCategories(categoriesRes);
-      console.log(categories)
-    }
-  
+      console.log(categories);
+    };
+
     getCategories();
   }, []);
 
   useEffect(() => {
     const getSubCategories = async () => {
-      const subCategoriesRes = await api.category.getSubCategories.query({categoryId: categoryId ? categoryId : ""})
+      const subCategoriesRes = await api.category.getSubCategories.query({
+        categoryId: categoryId ? categoryId : "",
+      });
       setSubCategories(subCategoriesRes);
-      console.log(subCategories)
-    }
-  
+      console.log(subCategories);
+    };
+
     getSubCategories();
   }, [categoryId]);
-  
+
   return (
     <div className="">
-              <ModalProvider />
+      <ModalProvider />
 
       <Card className="">
         <CardHeader>
@@ -115,20 +116,17 @@ const ProductForm = () => {
                           <SelectValue placeholder="Select Origin Type of Product" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className={theme == "light" ? "bg-white" : "bg-black"}>
-                        <SelectItem value="In house">
-                          In house
-                        </SelectItem>
-                        <SelectItem value="seller">
-                          Seller
-                        </SelectItem>
+                      <SelectContent
+                        className={theme == "light" ? "bg-white" : "bg-black"}
+                      >
+                        <SelectItem value="In house">In house</SelectItem>
+                        <SelectItem value="seller">Seller</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
 
               <FormField
                 control={form.control}
@@ -180,8 +178,8 @@ const ProductForm = () => {
                   </>
                 )}
               />
-              
-            <FormField
+
+              <FormField
                 control={form.control}
                 name="categoryId"
                 render={({ field }) => (
@@ -196,16 +194,23 @@ const ProductForm = () => {
                           <SelectValue placeholder="Select Category of Product" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className={theme == "light" ? "bg-white" : "bg-black"}>
-                      {
-    categories.map((category) => (
-        <SelectItem key={category.id} value={category.id}>
-          {category.name}
-        </SelectItem>
-      ))
-}
+                      <SelectContent
+                        className={theme == "light" ? "bg-white" : "bg-black"}
+                      >
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
 
-                        <Button onClick={onCategoryOpen} className={theme === "light" ? "bg-white text-black w-full hover:bg-slate-100" : "bg-black text-white w-full hover:bg-slate-900"}>
+                        <Button
+                          onClick={onCategoryOpen}
+                          className={
+                            theme === "light"
+                              ? "w-full bg-white text-black hover:bg-slate-100"
+                              : "w-full bg-black text-white hover:bg-slate-900"
+                          }
+                        >
                           Create New Category
                         </Button>
                       </SelectContent>
@@ -214,48 +219,61 @@ const ProductForm = () => {
                   </FormItem>
                 )}
               />
-            {
-              categoryId ? <>
-              <SubCategoryModalProvider categoryId={categoryId} />
-            <FormField
-                control={form.control}
-                name="subCategoryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Product Subcategory</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Subcategory of Product" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className={theme == "light" ? "bg-white" : "bg-black"}>
-                        {
-                          subCategories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.name}
-                            </SelectItem>
-                          )
-                          )
-                        }
-                        <Button onClick={onSubcategoryOpen} className={theme === "light" ? "bg-white text-black w-full hover:bg-slate-100" : "bg-black text-white w-full hover:bg-slate-900"}>
-                          Create New Subcategory
-                        </Button>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              </> : <></>
-            }
-             
+              {categoryId ? (
+                <>
+                  <SubCategoryModalProvider categoryId={categoryId} />
+                  <FormField
+                    control={form.control}
+                    name="subCategoryId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product Subcategory</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Subcategory of Product" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent
+                            className={
+                              theme == "light" ? "bg-white" : "bg-black"
+                            }
+                          >
+                            {subCategories.map((category) => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                            <Button
+                              onClick={onSubcategoryOpen}
+                              className={
+                                theme === "light"
+                                  ? "w-full bg-white text-black hover:bg-slate-100"
+                                  : "w-full bg-black text-white hover:bg-slate-900"
+                              }
+                            >
+                              Create New Subcategory
+                            </Button>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
 
               <Button
-                className={theme == "light" ? "bg-black text-white hover:bg-slate-800 rounded-lg" : "bg-white text-black hover:bg-slate-300"}
+                className={
+                  theme == "light"
+                    ? "rounded-lg bg-black text-white hover:bg-slate-800"
+                    : "bg-white text-black hover:bg-slate-300"
+                }
                 type="submit"
               >
                 Submit

@@ -1,7 +1,7 @@
 "use client";
 
-import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,17 +10,25 @@ import { subCategorySchema } from "@/server/api/types";
 import { subSubCategorySchema } from "@/server/api/types";
 import { Modal } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "../ui/toast";
 import { useSubCategoryModal } from "@/hooks/use-sub-category-modal";
-import { shallow } from 'zustand/shallow'
+import { shallow } from "zustand/shallow";
 import { useSubcategory } from "@/hooks/use-subcategories";
 
-export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
+export const SubCategoryModal = ({ categoryId }: { categoryId: string }) => {
   const storeModal = useSubCategoryModal();
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const [loading, setLoading] = useState(false);
 
@@ -30,44 +38,47 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
       categoryId: "",
       name: "",
       priorityNumber: "",
-    imageUrl: "",
+      imageUrl: "",
     },
   });
-  const {formState} = subCategoryForm;
-  const setSubcategories = useSubcategory((state) => state.setSubcategories, shallow);
-  const subcategories = api.category.getSubCategories.query({categoryId: categoryId})
+  const { formState } = subCategoryForm;
+  const setSubcategories = useSubcategory(
+    (state) => state.setSubcategories,
+    shallow
+  );
+  const subcategories = api.category.getSubCategories.query({
+    categoryId: categoryId,
+  });
   const onSubmit = async (values: z.infer<typeof subCategorySchema>) => {
     try {
-      console.log("start")
+      console.log("start");
       setLoading(true);
       values.categoryId = categoryId;
       const response = await api.category.createSubCategory.mutate(values);
-      setSubcategories([...await subcategories, response]);
+      setSubcategories([...(await subcategories), response]);
       console.log(response);
       storeModal.onClose();
       toast({
         title: `Created Subcategory: ${values.name}`,
         description: `With Priority Count Set To ${values.priorityNumber}`,
-      })
-      
+      });
     } catch (error) {
-        toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: "There was a problem with your request.",
-            action: <ToastAction altText="Try again">Try again</ToastAction>,
-          })
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
     <Modal
       title="Create Sub Category"
       description="Add a new subcategory to add to the category."
-      isOpen={storeModal.isOpen} 
+      isOpen={storeModal.isOpen}
       onClose={storeModal.onClose}
     >
       <div>
@@ -82,7 +93,11 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
                     <FormItem className="mb-5">
                       <FormLabel>Category Name</FormLabel>
                       <FormControl>
-                        <Input disabled={loading} placeholder="Category Name" {...field} />
+                        <Input
+                          disabled={loading}
+                          placeholder="Category Name"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -95,7 +110,12 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
                     <FormItem className="mb-5">
                       <FormLabel className="mt-5">Priority Number</FormLabel>
                       <FormControl>
-                        <Input disabled={loading} type="number" placeholder="Priority Number" {...field} />
+                        <Input
+                          disabled={loading}
+                          type="number"
+                          placeholder="Priority Number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -108,20 +128,35 @@ export const SubCategoryModal = ({categoryId}: {categoryId: string}) => {
                     <FormItem>
                       <FormLabel>Image URL</FormLabel>
                       <FormControl>
-                        <Input disabled={loading} placeholder="Image URL" {...field} />
+                        <Input
+                          disabled={loading}
+                          placeholder="Image URL"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-                  <Button disabled={loading} type="button" variant="outline" onClick={storeModal.onClose}>
+                <div className="flex w-full items-center justify-end space-x-2 pt-6">
+                  <Button
+                    disabled={loading}
+                    type="button"
+                    variant="outline"
+                    onClick={storeModal.onClose}
+                  >
                     Cancel
                   </Button>
-                  <Button onClick={() => console.log(formState.errors)} disabled={loading}  type="submit">Create Subcategory</Button>
+                  <Button
+                    onClick={() => console.log(formState.errors)}
+                    disabled={loading}
+                    type="submit"
+                  >
+                    Create Subcategory
+                  </Button>
                 </div>
               </form>
-            </Form> 
+            </Form>
           </div>
         </div>
       </div>

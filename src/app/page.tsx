@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
@@ -38,13 +38,13 @@ export default function Home() {
   console.log(subCategoryRes);
   console.log(subSubCategoryRes);
   */
- const onOpen = useCategoryModal((state) => state.onOpen);
-const subCategoryOnOpen = useSubCategoryModal((state) => state.onOpen);
+  const onOpen = useCategoryModal((state) => state.onOpen);
+  const subCategoryOnOpen = useSubCategoryModal((state) => state.onOpen);
   return (
     <main className="">
       <UserButton afterSignOutUrl="/" />
       <ModalProvider />
-          <SubCategoryModalProvider categoryId="clltbzg440000hg74h0619zhm" />
+      <SubCategoryModalProvider categoryId="clltbzg440000hg74h0619zhm" />
       <Button onClick={onOpen}>Category</Button>
       <Button onClick={subCategoryOnOpen}>SubCategory</Button>
     </main>

@@ -2,9 +2,9 @@ import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import { ClerkProvider } from "@clerk/nextjs";
-import { ThemeProvider } from "@/providers/theme-provider"
+import { ThemeProvider } from "@/providers/theme-provider";
 import { ModalProvider } from "@/providers/modal-provider";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 import { SubCategoryModalProvider } from "@/providers/sub-category-modal-provider";
 
 const inter = Inter({
@@ -32,10 +32,9 @@ export default function RootLayout({
             inter.variable
           )}
         >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-
-          {children}
-          <Toaster />
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            <Toaster />
           </ThemeProvider>
         </body>
       </ClerkProvider>

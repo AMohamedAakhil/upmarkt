@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { categorySchema, subCategorySchema, subSubCategorySchema } from "@/server/api/types";
+import {
+  categorySchema,
+  subCategorySchema,
+  subSubCategorySchema,
+} from "@/server/api/types";
 
 export const createCategory = publicProcedure
   .input(categorySchema)
@@ -16,7 +20,7 @@ export const createCategory = publicProcedure
     return res;
   });
 
-  export const createSubCategory = publicProcedure
+export const createSubCategory = publicProcedure
   .input(subCategorySchema) // Assuming you have a schema for subcategory input
   .mutation(async ({ ctx, input }) => {
     const res = await ctx.prisma.storeSubCategory.create({
@@ -53,19 +57,21 @@ export const getCategories = publicProcedure.query(async ({ ctx }) => {
 export const getLastCategory = publicProcedure.query(async ({ ctx }) => {
   return ctx.prisma.storeCategory.findMany({
     orderBy: {
-      createdAt: 'desc'
+      createdAt: "desc",
     },
-    take: 1
+    take: 1,
   });
 });
 
-export const getSubCategories = publicProcedure.input(z.object({categoryId: z.string()})).query(async ({ ctx, input }) => {
-  return ctx.prisma.storeSubCategory.findMany({
-    where: {
-      categoryId: input.categoryId
-    }
+export const getSubCategories = publicProcedure
+  .input(z.object({ categoryId: z.string() }))
+  .query(async ({ ctx, input }) => {
+    return ctx.prisma.storeSubCategory.findMany({
+      where: {
+        categoryId: input.categoryId,
+      },
+    });
   });
-});
 
 export const getSubSubCategories = publicProcedure.query(async ({ ctx }) => {
   return ctx.prisma.storeSubSubCategory.findMany({});

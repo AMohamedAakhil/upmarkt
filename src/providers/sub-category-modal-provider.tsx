@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 
 import { SubCategoryModal } from "@/components/modals/subcategory-modal";
 
-export const SubCategoryModalProvider = ({categoryId} : {categoryId: string}) => {
+export const SubCategoryModalProvider = ({
+  categoryId,
+}: {
+  categoryId: string;
+}) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -20,4 +24,4 @@ export const SubCategoryModalProvider = ({categoryId} : {categoryId: string}) =>
       <SubCategoryModal categoryId={categoryId} />
     </>
   );
-}
+};

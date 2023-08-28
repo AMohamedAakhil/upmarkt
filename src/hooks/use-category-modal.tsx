@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface useCategoryModalStore {
   isOpen: boolean;
@@ -15,5 +15,5 @@ export const useCategoryModal = create<useCategoryModalStore>((set) => ({
   afterFetch: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false, isClose: true }),
-  onFetch: () => set({ afterFetch: true}),
+  onFetch: () => set({ afterFetch: true }),
 }));

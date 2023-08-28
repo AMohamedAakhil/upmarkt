@@ -59,13 +59,13 @@ export const createProduct = publicProcedure
         description: input.description,
         warranty: input.warranty,
         categories: {
-          connect: {id: input.categoryId},
+          connect: { id: input.categoryId },
         },
         subCategories: {
-          connect: {id: input.subCategoryId},
+          connect: { id: input.subCategoryId },
         },
         subSubCategories: {
-          connect: {id: input.subSubCategoryId},
+          connect: { id: input.subSubCategoryId },
         },
         productCode: input.productCode,
         brand: input.brand,

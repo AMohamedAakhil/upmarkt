@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 
 const AdminNavbar = () => {
   const pathname = usePathname();
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const navLinks = [
     { name: "Dashboard", href: "/admin" },
     { name: "Products", href: "/admin/products" },
@@ -17,7 +17,7 @@ const AdminNavbar = () => {
   ];
 
   return (
-    <div className="flex w-full justify-between items-center border-b p-5">
+    <div className="flex w-full items-center justify-between border-b p-5">
       <div className="flex space-x-20">
         <h1>Admin</h1>
         <div className="flex space-x-10">
@@ -25,16 +25,16 @@ const AdminNavbar = () => {
             const isActive = pathname === link.href;
             return (
               <Link
-              className={
-                isActive
-                  ? theme === 'light'
-                    ? "text-black"
-                    : "text-white"
-                  : theme === 'light'
-                  ? "text-slate-500"
-                  : "text-slate-500"
-              }
-              href={link.href}
+                className={
+                  isActive
+                    ? theme === "light"
+                      ? "text-black"
+                      : "text-white"
+                    : theme === "light"
+                    ? "text-slate-500"
+                    : "text-slate-500"
+                }
+                href={link.href}
                 key={link.name}
               >
                 {link.name}
@@ -44,8 +44,8 @@ const AdminNavbar = () => {
         </div>
       </div>
       <div className="flex items-center space-x-3">
-      <ModeToggle />
-      <UserButton afterSignOutUrl="/" />
+        <ModeToggle />
+        <UserButton afterSignOutUrl="/" />
       </div>
     </div>
   );

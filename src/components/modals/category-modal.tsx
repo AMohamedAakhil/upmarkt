@@ -1,7 +1,7 @@
 "use client";
 
-import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,23 +11,30 @@ import { subCategorySchema } from "@/server/api/types";
 import { subSubCategorySchema } from "@/server/api/types";
 import { Modal } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useCategoryModal } from "@/hooks/use-category-modal";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "../ui/toast";
 import { useCategory } from "@/hooks/use-categories";
 const formSchema = z.object({
   name: z.string().min(1),
 });
 
-import { shallow } from 'zustand/shallow'
-
+import { shallow } from "zustand/shallow";
 
 export const CategoryModal = () => {
   const storeModal = useCategoryModal();
   const router = useRouter();
-  const { toast } = useToast()
+  const { toast } = useToast();
   const setCategories = useCategory((state) => state.setCategories, shallow);
   const categories = useCategory((state) => state.categories, shallow);
 
@@ -37,11 +44,11 @@ export const CategoryModal = () => {
     resolver: zodResolver(categorySchema),
     defaultValues: {
       name: "",
-    imageUrl: "",
-    priorityNumber: "",
+      imageUrl: "",
+      priorityNumber: "",
     },
   });
-  const {formState} = form
+  const { formState } = form;
   const onFetch = useCategoryModal((state) => state.onFetch);
 
   const onSubmit = async (values: z.infer<typeof categorySchema>) => {
@@ -55,15 +62,14 @@ export const CategoryModal = () => {
       toast({
         title: `Created Category: ${values.name}`,
         description: `With Priority Count Set To ${values.priorityNumber}`,
-      })
-      
+      });
     } catch (error) {
-        toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: "There was a problem with your request.",
-            action: <ToastAction altText="Try again">Try again</ToastAction>,
-          })
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     } finally {
       setLoading(false);
     }
@@ -73,7 +79,7 @@ export const CategoryModal = () => {
     <Modal
       title="Create category"
       description="Add a new category to add to the store."
-      isOpen={storeModal.isOpen} 
+      isOpen={storeModal.isOpen}
       onClose={storeModal.onClose}
     >
       <div>
@@ -88,7 +94,11 @@ export const CategoryModal = () => {
                     <FormItem className="mb-5">
                       <FormLabel>Category Name</FormLabel>
                       <FormControl>
-                        <Input disabled={loading} placeholder="Category Name" {...field} />
+                        <Input
+                          disabled={loading}
+                          placeholder="Category Name"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -101,7 +111,12 @@ export const CategoryModal = () => {
                     <FormItem className="mb-5">
                       <FormLabel className="mt-5">Priority Number</FormLabel>
                       <FormControl>
-                        <Input disabled={loading} type="number" placeholder="Priority Number" {...field} />
+                        <Input
+                          disabled={loading}
+                          type="number"
+                          placeholder="Priority Number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -114,17 +129,33 @@ export const CategoryModal = () => {
                     <FormItem>
                       <FormLabel>Image URL</FormLabel>
                       <FormControl>
-                        <Input disabled={loading} placeholder="Image URL" {...field} />
+                        <Input
+                          disabled={loading}
+                          placeholder="Image URL"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-                  <Button disabled={loading} variant="outline" onClick={storeModal.onClose}>
+                <div className="flex w-full items-center justify-end space-x-2 pt-6">
+                  <Button
+                    disabled={loading}
+                    variant="outline"
+                    onClick={storeModal.onClose}
+                  >
                     Cancel
                   </Button>
-                  <Button disabled={loading} onClick={() => {console.log(formState.errors)}} type="submit">Create Category</Button>
+                  <Button
+                    disabled={loading}
+                    onClick={() => {
+                      console.log(formState.errors);
+                    }}
+                    type="submit"
+                  >
+                    Create Category
+                  </Button>
                 </div>
               </form>
             </Form>

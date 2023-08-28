@@ -43,14 +43,14 @@ export const categorySchema = z.object({
   name: z.string().min(1, "Category name must be at least 1 character"),
   priorityNumber: z.string(),
   imageUrl: z.string(),
-})
+});
 
 export const subCategorySchema = z.object({
   name: z.string().min(1, "Category name must be at least 1 character"),
   priorityNumber: z.string(),
   imageUrl: z.string(),
   categoryId: z.string(),
-})
+});
 
 export const subSubCategorySchema = z.object({
   name: z.string().min(1, "Category name must be at least 1 character"),
