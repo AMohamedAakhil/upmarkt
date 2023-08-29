@@ -28,7 +28,7 @@ export const createBrand = publicProcedure
     return res;
   });
 
-  export const createAttribute = publicProcedure
+export const createAttribute = publicProcedure
   .input(
     z.object({
       name: z.string().min(1),
@@ -43,7 +43,6 @@ export const createBrand = publicProcedure
 
     return res;
   });
-
 
 export const getAttributes = publicProcedure.query(async ({ ctx }) => {
   return ctx.prisma.attribute.findMany({});
@@ -76,7 +75,6 @@ export const getImage = publicProcedure
 
     return res;
   });
-
 
 export const miscRouter = createTRPCRouter({
   getBrands: getBrands,

@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 const AddProduct = async () => {
   const onboarded = await api.store.checkStore.query();
   if (!onboarded) {
-    redirect("/admin/onboarding")
+    redirect("/admin/onboarding");
   }
   return (
     <div className="p-5">

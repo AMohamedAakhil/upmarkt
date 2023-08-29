@@ -58,12 +58,12 @@ export const createProduct = publicProcedure
         name: input.name,
         description: input.description,
         warranty: input.warranty,
-        ...(input.categoryId !== '' && {
+        ...(input.categoryId !== "" && {
           categories: {
             connect: { id: input.categoryId },
           },
         }),
-        ...(input.subCategoryId !== '' && {
+        ...(input.subCategoryId !== "" && {
           subCategories: {
             connect: { id: input.subCategoryId },
           },
@@ -91,7 +91,8 @@ export const createProduct = publicProcedure
         minimumQuantity: input.minimumQuantity,
         shippingCost: input.shippingCost,
         deliveryDuration: input.deliveryDuration,
-        shippingCostMultiplyByQuantity: input.shippingCostMultiplyByQuantity === 'yes',
+        shippingCostMultiplyByQuantity:
+          input.shippingCostMultiplyByQuantity === "yes",
         images: {
           connect: images.map((image) => ({ id: image.id })),
         },

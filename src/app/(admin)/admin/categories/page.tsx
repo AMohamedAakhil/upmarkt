@@ -28,7 +28,7 @@ export default function ProfileForm() {
       }
     }
     checkOnboarding();
-  }, [])
+  }, []);
   const { theme } = useTheme();
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),

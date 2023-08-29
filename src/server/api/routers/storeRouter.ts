@@ -27,20 +27,20 @@ export const getStores = publicProcedure.query(async ({ ctx }) => {
 
 export const checkStore = publicProcedure.query(async ({ ctx }) => {
   const user = await currentUser();
-  const emailAddress = user?.emailAddresses[0]!.emailAddress!
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
   const res = await ctx.prisma.store.findUnique({
-    where : {
-      email: emailAddress
-    }
-  })
+    where: {
+      email: emailAddress,
+    },
+  });
   if (res) {
-    return true
+    return true;
   } else {
-    return false
+    return false;
   }
 });
 export const storeRouter = createTRPCRouter({
-    createStore: createStore,
+  createStore: createStore,
   getStores: getStores,
   checkStore: checkStore,
 });

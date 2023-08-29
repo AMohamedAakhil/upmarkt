@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export default async function Admin() {
   const onboarded = await api.store.checkStore.query();
   if (!onboarded) {
-    redirect("/admin/onboarding")
+    redirect("/admin/onboarding");
   }
   return (
     <div className="p-5">
@@ -15,4 +15,4 @@ export default async function Admin() {
       </div>
     </div>
   );
-  }
+}

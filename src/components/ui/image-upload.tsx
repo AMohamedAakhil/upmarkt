@@ -27,7 +27,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   useEffect(() => {
     setIsMounted(true);
   }, []);
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const onUpload = async (e: FileUploadHandlerEvent) => {
     setLoading(true);
     const formData = new FormData();
@@ -78,7 +78,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       </div>
       {loading ? (
         <>
-          <div className={theme === "light" ? "w-full h-20 flex items-center justify-center bg-slate-200" : "w-full flex items-center justify-center h-20 bg-slate-900" }>
+          <div
+            className={
+              theme === "light"
+                ? "flex h-20 w-full items-center justify-center bg-slate-200"
+                : "flex h-20 w-full items-center justify-center bg-slate-900"
+            }
+          >
             <div role="status">
               <svg
                 aria-hidden="true"
@@ -102,8 +108,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         </>
       ) : (
         <>
-                    <FileUpload name="imageUpload" customUpload uploadHandler={(e) => onUpload(e)} accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>}  />
-
+          <FileUpload
+            name="imageUpload"
+            customUpload
+            uploadHandler={(e) => onUpload(e)}
+            accept="image/*"
+            maxFileSize={1000000}
+            emptyTemplate={
+              <p className="m-0">Drag and drop files to here to upload.</p>
+            }
+          />
         </>
       )}
     </div>

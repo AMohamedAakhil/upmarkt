@@ -5,7 +5,7 @@ import React from "react";
 const Orders = async () => {
   const onboarded = await api.store.checkStore.query();
   if (!onboarded) {
-    redirect("/admin/onboarding")
+    redirect("/admin/onboarding");
   }
   return (
     <div className="p-5">

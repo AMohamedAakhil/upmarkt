@@ -86,7 +86,6 @@ export const productFormSchema = z.object({
   attributeValues: z.record(z.array(z.string())).optional(),
 });
 
-
 export const categorySchema = z.object({
   name: z.string().min(1, "Category name must be at least 1 character"),
   priorityNumber: z.string(),
@@ -117,4 +116,4 @@ export const storeSchema = z.object({
   address: z.string(),
   logoUrl: z.string(),
   bannerUrl: z.string(),
-})
+});

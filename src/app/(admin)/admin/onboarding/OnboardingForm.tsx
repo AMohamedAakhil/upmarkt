@@ -9,10 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
- 
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -21,8 +21,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/ui/image-upload";
@@ -33,7 +33,7 @@ import { api } from "@/trpc/client";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-const OnboardingForm = ({emailAddress} : {emailAddress: string}) => {
+const OnboardingForm = ({ emailAddress }: { emailAddress: string }) => {
   useEffect(() => {
     async function checkOnboarding() {
       const store = await api.store.checkStore.query();
@@ -42,9 +42,9 @@ const OnboardingForm = ({emailAddress} : {emailAddress: string}) => {
       }
     }
     checkOnboarding();
-  }, [])
-  
-  const {theme} = useTheme();
+  }, []);
+
+  const { theme } = useTheme();
 
   const [loading, setLoading] = useState(false);
 
@@ -59,22 +59,22 @@ const OnboardingForm = ({emailAddress} : {emailAddress: string}) => {
       logoUrl: "",
       bannerUrl: "",
     },
-  })
- 
+  });
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof storeSchema>) {
     setLoading(true);
 
     const storeRes = await api.store.createStore.mutate(values);
     console.log(storeRes);
-    console.log(values)
+    console.log(values);
     setLoading(false);
     redirect("/admin");
   }
 
   return (
-  <div>
-    {theme === "light" ? (
+    <div>
+      {theme === "light" ? (
         <>
           <link
             id="theme-link"
@@ -92,83 +92,101 @@ const OnboardingForm = ({emailAddress} : {emailAddress: string}) => {
         </>
       )}
 
-    <Card>
-      <CardHeader>
-        <CardTitle>Create New Store</CardTitle>
-        <CardDescription>You have to first create a new store to access it</CardDescription>
-      </CardHeader>
-      <CardContent>
-      <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Store Name</FormLabel>
-              <FormControl>
-                <Input disabled={loading} placeholder="Enter Store Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <Card>
+        <CardHeader>
+          <CardTitle>Create New Store</CardTitle>
+          <CardDescription>
+            You have to first create a new store to access it
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Store Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={loading}
+                        placeholder="Enter Store Name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-<FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input disabled placeholder="Enter Email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input disabled placeholder="Enter Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-      <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone Number</FormLabel>
-              <FormControl>
-                <Input disabled={loading} type="number" placeholder="Enter Phone Number" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-                <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Store Description</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter Store Description" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-                <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Store Address</FormLabel>
-              <FormControl>
-                <Input disabled={loading} placeholder="Enter Store Address" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-                
-                <FormField
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={loading}
+                        type="number"
+                        placeholder="Enter Phone Number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Store Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Enter Store Description"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Store Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={loading}
+                        placeholder="Enter Store Address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
                 control={form.control}
                 name="logoUrl"
                 render={({ field }) => (
@@ -187,7 +205,7 @@ const OnboardingForm = ({emailAddress} : {emailAddress: string}) => {
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="bannerUrl"
                 render={({ field }) => (
@@ -205,12 +223,15 @@ const OnboardingForm = ({emailAddress} : {emailAddress: string}) => {
                   </FormItem>
                 )}
               />
-        <Button disabled={loading} className="w-full" type="submit">Submit</Button>
-      </form>
-    </Form>
-      </CardContent>
-    </Card>
-  </div>);  
+              <Button disabled={loading} className="w-full" type="submit">
+                Submit
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
 
 export default OnboardingForm;
