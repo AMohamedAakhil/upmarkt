@@ -1,13 +1,13 @@
 "use client";
 
-import { HTMLInputTypeAttribute, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { ImagePlus, Trash } from "lucide-react";
-import { Input } from "./input";
+import { Trash } from "lucide-react";
 import axios from "axios";
-import { Spinner } from "flowbite-react";
+import { FileUpload, FileUploadHandlerEvent } from "primereact/fileupload";
+import { useTheme } from "next-themes";
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -27,12 +27,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const {theme} = useTheme();
+  const onUpload = async (e: FileUploadHandlerEvent) => {
     setLoading(true);
     const formData = new FormData();
-    if (e.target.files) {
-      for (const file of e.target.files) {
+    if (e.files) {
+      for (const file of e.files) {
         formData.append("file", file);
       }
     } else {
@@ -78,11 +78,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       </div>
       {loading ? (
         <>
-          <Button variant="secondary" className="w-full">
+          <div className={theme === "light" ? "w-full h-20 flex items-center justify-center bg-slate-200" : "w-full flex items-center justify-center h-20 bg-slate-900" }>
             <div role="status">
               <svg
                 aria-hidden="true"
-                className="mr-2 inline h-5 w-5 animate-spin fill-gray-600 text-gray-200 dark:fill-gray-300 dark:text-gray-600"
+                className="mr-2 inline h-10 w-10 animate-spin fill-gray-600 text-gray-200 dark:fill-gray-300 dark:text-gray-600"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -98,17 +98,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               </svg>
               <span className="sr-only">Loading...</span>
             </div>
-          </Button>
+          </div>
         </>
       ) : (
         <>
-          <Input
-            className="mb-4 block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
-            accept="image/*"
-            type="file"
-            onChange={(e) => onUpload(e)}
-            placeholder="Select Image "
-          />
+                    <FileUpload name="imageUpload" customUpload uploadHandler={(e) => onUpload(e)} accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>}  />
+
         </>
       )}
     </div>

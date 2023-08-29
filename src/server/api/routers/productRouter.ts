@@ -28,7 +28,7 @@ export const createProduct = publicProcedure
     const images = await ctx.prisma.variant.findMany({
       where: {
         id: {
-          in: input.imagesId,
+          in: input.images,
         },
       },
     });
@@ -46,11 +46,11 @@ export const createProduct = publicProcedure
         },
       },
     });
-    const store = await ctx.prisma.store.findUnique({
+    /* const store = await ctx.prisma.store.findUnique({
       where: {
         id: input.storeId,
       },
-    });
+    }); */
 
     const finalRes = await ctx.prisma.product.create({
       data: {
@@ -58,17 +58,20 @@ export const createProduct = publicProcedure
         name: input.name,
         description: input.description,
         warranty: input.warranty,
-        categories: {
-          connect: { id: input.categoryId },
-        },
-        subCategories: {
-          connect: { id: input.subCategoryId },
-        },
-        subSubCategories: {
-          connect: { id: input.subSubCategoryId },
-        },
+        ...(input.categoryId !== '' && {
+          categories: {
+            connect: { id: input.categoryId },
+          },
+        }),
+        ...(input.subCategoryId !== '' && {
+          subCategories: {
+            connect: { id: input.subCategoryId },
+          },
+        }),
         productCode: input.productCode,
-        brand: input.brand,
+        brand: {
+          connect: { id: input.brandId },
+        },
         unit: input.unit,
         colors: {
           connect: colors.map((color) => ({ id: color.id })),
@@ -88,8 +91,7 @@ export const createProduct = publicProcedure
         minimumQuantity: input.minimumQuantity,
         shippingCost: input.shippingCost,
         deliveryDuration: input.deliveryDuration,
-        shippingCostMultiplyByQuantity: input.shippingCostMultiplyByQuantity,
-        status: input.status,
+        shippingCostMultiplyByQuantity: input.shippingCostMultiplyByQuantity === 'yes',
         images: {
           connect: images.map((image) => ({ id: image.id })),
         },
@@ -104,12 +106,13 @@ export const createProduct = publicProcedure
         banners: {
           connect: banners.map((banner) => ({ id: banner.id })),
         },
-        store: {
-          connect: {
-            // eslint-disable-next-line no-use-before-define
-            id: store!.id,
+        /*...(store && {
+          store: {
+            connect: {
+              id: store.id,
+            },
           },
-        },
+        }), */
       },
     });
 

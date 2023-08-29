@@ -52,26 +52,16 @@ model Address {
   Order      Order[]
 }
 
-model Seller {
-  id        String   @id @default(cuid())
-  firstName String
-  lastName  String
-  phone     String
-  email     String
-  store     Store[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Store {
   id                String             @id @default(cuid())
-  seller            Seller             @relation(fields: [sellerId], references: [id])
-  sellerId          String
-  description       String
+  name String
+  email String @unique
+  phone String
+  description       String?
   address           String
   logoUrl           String
   bannerUrl         String
-  status            Boolean
+  status            Boolean?
   sections          Section[]
   categories        StoreCategory[]
   attributes        Attribute[]
@@ -84,7 +74,6 @@ model Store {
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
 
-  @@index([sellerId])
 }
 
 model Section {
@@ -113,48 +102,47 @@ model Gallery {
 
 model Product {
   id                             String           @id @default(cuid())
-  originType                     String // INHOUSE OR SELLER PRODUCT
-  name                           String
-  description                    String
-  warranty                       String
+  originType                     String? // INHOUSE OR SELLER PRODUCT
+  name                           String?
+  description                    String?
+  warranty                       String?
   categories                     StoreCategory? @relation(fields: [categoryId], references: [id])
   categoryId                     String?
   subCategories              StoreSubCategory? @relation(fields: [subCategoryId], references: [id])
   subCategoryId                  String?
   subSubCategories                 StoreSubSubCategory? @relation(fields: [subSubCategoryId], references: [id])
   subSubCategoryId                  String?
-  productCode                    String
-  brand                          Brand @relation(fields: [brandId], references: [id])
-  brandId                        String
-  unit                           String
+  productCode                    String?
+  brand                          Brand? @relation(fields: [brandId], references: [id])
+  brandId                        String?
+  unit                           String?
   colors                         Color[]
   attributes                     Attribute[]
-  attributeValues Json
-  unitPrice                      Float
-  purchasePrice                  Float
-  tax                            Float
-  discount                       Float
-  typeOfDiscount                 String
+  unitPrice                      Float?
+  purchasePrice                  Float?
+  tax                            Float?
+  discount                       Float?
+  typeOfDiscount                 String?
   variants                       Variant[]
-  totalQuantity                  Int
-  minimumQuantity                Int
-  shippingCost                   Float
-  deliveryDuration               String
-  shippingCostMultiplyByQuantity Boolean
-  status                         Boolean
+  totalQuantity                  Int?
+  minimumQuantity                Int?
+  shippingCost                   Float?
+  deliveryDuration               String?
+  shippingCostMultiplyByQuantity Boolean?
+  status                         Boolean?
   images                         Image[]          @relation("productImages")
-  thumbnailUrl                   String
-  youtubeLink                    String
-  metaTitle                      String
-  metaDescription                String
-  metaImageUrl                   String
+  thumbnailUrl                   String?
+  youtubeLink                    String?
+  metaTitle                      String?
+  metaDescription                String?
+  metaImageUrl                   String?
   banners                         Banner[]
   reviews                        CustomerReview[]
   usersInWishlist                User[]           @relation("usersInWishlist")
   usersInCart                    User[]           @relation("usersInCart")
   orders                         Order[]
-  store                          Store            @relation(fields: [storeId], references: [id])
-  storeId                        String
+  store                          Store?            @relation(fields: [storeId], references: [id])
+  storeId                        String?
   createdAt                      DateTime         @default(now())
   updatedAt                      DateTime         @updatedAt
 
@@ -191,10 +179,9 @@ model Color {
 
 model Image {
   id              String  @id @default(cuid())
-  name            String
   url             String
-  productImages   Product @relation("productImages", fields: [productImagesId], references: [id])
-  productImagesId String
+  productImages   Product? @relation("productImages", fields: [productImagesId], references: [id])
+  productImagesId String?
 
   @@index([productImagesId])
 }

@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { api } from "@/trpc/client";
-import { productSchema } from "@/server/api/types";
+import { productFormSchema } from "@/server/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { classNames } from "primereact/utils";
 import {
@@ -48,33 +48,122 @@ import { useBrand } from "@/hooks/use-brands";
 import { useBrandModal } from "@/hooks/use-brand-modal";
 import { Plus } from "lucide-react";
 import { MultiSelect, MultiSelectChangeEvent } from "primereact/multiselect";
-import "primereact/resources/primereact.min.css";
 import { useAttribute } from "@/hooks/use-attributes";
 import { Chips } from "primereact/chips";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
+import MultipleImageUpload from "@/components/ui/multiple-image-upload";
+import ImageUpload from "@/components/ui/image-upload";
+import "primereact/resources/primereact.min.css";
+import { AttributeModal } from "@/components/modals/attribute-modal";
+import { AttributeModalProvider } from "@/providers/attribute-modal-provider";
+import { useAttributeModal } from "@/hooks/use-attribute-modal";
 
 const ProductForm = () => {
   const { theme } = useTheme();
 
-  const form = useForm<z.infer<typeof productSchema>>({
-    // resolver: zodResolver(productSchema),
+  const form = useForm<z.infer<typeof productFormSchema>>({
+    resolver: zodResolver(productFormSchema),
     defaultValues: {
+      originType: "",
       name: "",
+      description: "",
+      warranty: "",
+      categoryId: "",
+      productCode: "",
+      brand: "",
+      unit: "",
+      unitPrice: "0",
+      purchasePrice: "0",
+      tax: "0",
+      discount: "0",
+      typeOfDiscount: "",
+      totalQuantity: "0",
+      minimumQuantity: "0",
+      shippingCost: "0",
+      deliveryDuration: "",
+      shippingCostMultiplyByQuantity: "",
+      metaTitle: "",
+      metaDescription: "",
+      metaImageUrl: "",
+      youtubeLink: "",
+      thumbnailUrl: "",
+      images: [],
+      subCategoryId: "",
     },
   });
+  
   const { watch, setValue, getValues } = form;
   const categoryId = watch("categoryId");
   const attributesId = watch("attributesId");
   const onCategoryOpen = useCategoryModal((state) => state.onOpen);
   const onSubcategoryOpen = useSubCategoryModal((state) => state.onOpen);
-
+  const onAttributeOpen = useAttributeModal((state) => state.onOpen);
   const onBrandOpen = useBrandModal((state) => state.onOpen);
 
-  function onSubmit(values: z.infer<typeof productSchema>) {
-    // Do something with the form values.
+  async function onSubmit(values: z.infer<typeof productFormSchema>) {
+    setLoading(true);
+    const {
+      originType,
+      name,
+      description,
+      warranty,
+      categoryId,
+      productCode,
+      brand,
+      unit,
+      unitPrice,
+      purchasePrice,
+      tax,
+      discount,
+      typeOfDiscount,
+      totalQuantity,
+      minimumQuantity,
+      shippingCost,
+      deliveryDuration,
+      shippingCostMultiplyByQuantity,
+      metaTitle,
+      metaDescription,
+      metaImageUrl,
+      youtubeLink,
+      thumbnailUrl,
+      images,
+      subCategoryId,
+  } = values;
+
+  const acceptedValues = {
+    originType,
+    name,
+    description,
+    warranty,
+    categoryId,
+    productCode,
+    brandId: brand,
+    unit,
+    unitPrice: parseInt(unitPrice === undefined ? "0" : unitPrice),
+    purchasePrice: parseInt(purchasePrice || "0"),
+    tax: parseInt(tax || "0"),
+    discount: parseInt(discount || "0"),
+    typeOfDiscount,
+    totalQuantity: parseInt(totalQuantity || "0"),
+    minimumQuantity: parseInt(minimumQuantity || "0"),
+    shippingCost: parseInt(shippingCost || "0"),
+    deliveryDuration,
+    shippingCostMultiplyByQuantity,
+    metaTitle,
+    metaDescription,
+    metaImageUrl,
+    youtubeLink,
+    thumbnailUrl,
+    images,
+    subCategoryId,
+};
+
+    const productRes = await api.product.create.mutate(acceptedValues);
     // ✅ This will be type-safe and validated.
+    console.log("Product Res", productRes)
     console.log("submitted");
     console.log(values);
+    setLoading(false);
   }
   const categories = useCategory((state) => state.categories);
   const setCategories = useCategory((state) => state.setCategories);
@@ -89,6 +178,7 @@ const ProductForm = () => {
     (state) => state.setSelectedAttributes
   );
   const [attributeValues, setAttributeValues] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -129,6 +219,15 @@ const ProductForm = () => {
     getAttributes();
   }, []);
 
+  const [attributesArray, setAttributesArray] = useState<String[]>([]);
+
+  useEffect(() => {
+    const combinedArray = ([] as string[]).concat(
+      ...(Object.values(attributeValues) as string[][])
+    );
+    setAttributesArray(combinedArray);
+  }, [attributeValues]);
+
   return (
     <div className="">
       <ModalProvider />
@@ -150,14 +249,21 @@ const ProductForm = () => {
         </>
       )}
 
-      <Card className="">
+      <Card>
         <CardHeader>
-          <CardTitle>Product Details</CardTitle>
+          <CardTitle>Add Product</CardTitle>
+          <CardDescription>Fill the form below to add a new product.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
+              <Card>
+                <CardHeader>
+                  <CardTitle>Product Info</CardTitle>
+                  <CardDescription>Basic information about the product</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-5">
+                <FormField
                 control={form.control}
                 name="originType"
                 render={({ field }) => (
@@ -247,7 +353,14 @@ const ProductForm = () => {
                   </>
                 )}
               />
-
+                </CardContent>
+              </Card>
+             <Card>
+              <CardHeader>
+                <CardTitle>Category and Brand Info</CardTitle>
+                <CardDescription>Quick create categories, subcategories and brands.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-5">
               <FormField
                 control={form.control}
                 name="categoryId"
@@ -255,6 +368,7 @@ const ProductForm = () => {
                   <FormItem>
                     <FormLabel>Product Category</FormLabel>
                     <Select
+                    required
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -266,12 +380,6 @@ const ProductForm = () => {
                       <SelectContent
                         className={theme == "light" ? "bg-white" : "bg-black"}
                       >
-                        {categories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-
                         <Button
                           onClick={onCategoryOpen}
                           className={
@@ -283,6 +391,11 @@ const ProductForm = () => {
                           <Plus className="mr-3" />
                           Create New Category
                         </Button>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -312,11 +425,6 @@ const ProductForm = () => {
                               theme == "light" ? "bg-white" : "bg-black"
                             }
                           >
-                            {subCategories.map((category) => (
-                              <SelectItem key={category.id} value={category.id}>
-                                {category.name}
-                              </SelectItem>
-                            ))}
                             <Button
                               onClick={onSubcategoryOpen}
                               className={
@@ -328,6 +436,11 @@ const ProductForm = () => {
                               <Plus className="mr-3" />
                               Create New Subcategory
                             </Button>
+                            {subCategories.map((category) => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -339,7 +452,7 @@ const ProductForm = () => {
                 <></>
               )}
 
-              <FormField
+<FormField
                 control={form.control}
                 name="productCode"
                 render={({ field }) => (
@@ -390,12 +503,6 @@ const ProductForm = () => {
                       <SelectContent
                         className={theme == "light" ? "bg-white" : "bg-black"}
                       >
-                        {brands.map((brand) => (
-                          <SelectItem key={brand.id} value={brand.id}>
-                            {brand.name}
-                          </SelectItem>
-                        ))}
-
                         <Button
                           onClick={onBrandOpen}
                           className={
@@ -407,14 +514,114 @@ const ProductForm = () => {
                           <Plus className="mr-3" />
                           Create New Brand
                         </Button>
+                        {brands.map((brand) => (
+                          <SelectItem key={brand.id} value={brand.id}>
+                            {brand.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              </CardContent>
+             </Card>
 
+             <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                <CardTitle>Attributes</CardTitle>
+                <Button type="button" variant="secondary" onClick={onAttributeOpen}>Create New Attribute</Button>
+                </div>
+                <CardDescription>Select attributes, and add attribute values. Press Enter or add a "," to create new attribute values</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-8">
+                <AttributeModalProvider />
               <FormField
+                control={form.control}
+                name="attributesId"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <div className="flex space-x-2">
+                        <FormLabel>Attributes</FormLabel>
+                      </div>
+                      <FormControl>
+                        <div>
+                        <MultiSelect
+                          id={field.name}
+                          name="value"
+                          value={field.value}
+                          options={attributes}
+                          onChange={(e: MultiSelectChangeEvent) => {
+                            field.onChange(e.value),
+                              setSelectedAttributes(e.value);
+                          }}
+                          optionLabel="name"
+                          display="chip"
+                          filter
+                          placeholder="Select Attributes"
+                          maxSelectedLabels={3}
+                          className="md:w-20rem w-full"
+                        />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+
+{selectedAttributes ? (
+  <section className="grid grid-cols-4 gap-5">
+    {selectedAttributes.map((attribute) => (
+      <FormField
+        key={attribute.id}
+        control={form.control}
+        name={`attributeValues.${attribute.id}`}
+        render={({ field, fieldState }) => (
+          <span className="p-float-label card p-fluid">
+            <Chips
+              id={field.name}
+              name="chipArray"
+              allowDuplicate={false}
+              separator=","
+              className={classNames({
+                "p-invalid": fieldState.error,
+              })}
+              value={field.value}
+              onChange={(e) => {
+                field.onChange(e.value);
+                setAttributeValues((prevValues) => ({
+                  ...prevValues,
+                  [attribute.id]: e.value,
+                }));
+              }}
+            />
+            <label htmlFor={field.name}>{attribute.name}</label>
+          </span>
+        )}
+      />
+    ))}
+  </section>
+) : (
+  <></>
+)}
+
+
+              </CardContent>
+             </Card>
+
+              
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Pricing Info</CardTitle>
+                  <CardDescription>All pricing related info such as unit price, tax, discounts, etc</CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-4 gap-8">
+                <FormField
                 control={form.control}
                 name="unit"
                 render={({ field }) => (
@@ -443,77 +650,6 @@ const ProductForm = () => {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="attributesId"
-                render={({ field }) => (
-                  <>
-                    <FormItem>
-                      <div className="flex space-x-2">
-                        <FormLabel>Attributes</FormLabel>
-                      </div>
-                      <FormControl>
-                        <MultiSelect
-                          id={field.name}
-                          name="value"
-                          value={field.value}
-                          options={attributes}
-                          onChange={(e: MultiSelectChangeEvent) => {
-                            field.onChange(e.value),
-                              setSelectedAttributes(e.value);
-                          }}
-                          optionLabel="name"
-                          display="chip"
-                          placeholder="Select Attributes"
-                          maxSelectedLabels={3}
-                          className="md:w-20rem w-full"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  </>
-                )}
-              />
-
-              {selectedAttributes ? (
-                <div>
-                  {selectedAttributes.map((attribute) => (
-                    <FormField
-                      key={attribute.id} // Make sure to use a unique key
-                      control={form.control}
-                      name={`attributeValues.${attribute.id}`} // Use attribute ID as part of the field name
-                      render={({ field, fieldState }) => (
-                        <>
-                          <FormItem>
-                            <FormLabel>{attribute.name}</FormLabel>
-                            <FormControl>
-                              <Chips
-                                id={field.name}
-                                name="chipArray"
-                                separator=","
-                                className={classNames({
-                                  "p-invalid": fieldState.error,
-                                })}
-                                value={field.value}
-                                onChange={(e) => {
-                                  field.onChange(e.value);
-                                  setAttributeValues((prevValues) => ({
-                                    ...prevValues,
-                                    [attribute.id]: e.value,
-                                  }));
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        </>
-                      )}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <></>
-              )}
 
               <FormField
                 control={form.control}
@@ -627,16 +763,16 @@ const ProductForm = () => {
 
               <FormField
                 control={form.control}
-                name="discount"
+                name="totalQuantity"
                 render={({ field }) => (
                   <>
                     <FormItem>
                       <div className="flex space-x-2">
-                        <FormLabel>Discount</FormLabel>
+                        <FormLabel>Total Quantity</FormLabel>
                       </div>
                       <FormControl>
                         <Input
-                          placeholder="Enter Discount"
+                          placeholder="Enter Total Quantity"
                           type="number"
                           {...field}
                         />
@@ -647,15 +783,245 @@ const ProductForm = () => {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="minimumQuantity"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <div className="flex space-x-2">
+                        <FormLabel>Minimum Order Quantity</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter Minimum Order Quantity"
+                          type="number"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="shippingCost"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <div className="flex space-x-2">
+                        <FormLabel>Shipping Cost</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter Shipping Cost"
+                          type="number"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="deliveryDuration"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <div className="flex space-x-2">
+                        <FormLabel>Delivery Duration</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter Delivery Duration"
+                          type="number"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="shippingCostMultiplyByQuantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Shipping Cost Multiply with Quantity</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select shipping cost multiply with quantity" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent
+                        className={theme == "light" ? "bg-white" : "bg-black"}
+                      >
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+                </CardContent>
+              </Card>
+
+<Card>
+  <CardHeader>
+    <CardTitle>Meta Info</CardTitle>
+    <CardDescription>Meta information about the product</CardDescription>
+  </CardHeader>
+  <CardContent className="space-y-5">
+
+  <FormField
+                control={form.control}
+                name="metaTitle"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <div className="flex space-x-2">
+                        <FormLabel>Meta Title</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Input placeholder="Enter Meta Title" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="metaDescription"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <div className="flex space-x-2">
+                        <FormLabel>Meta Description</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter Meta Description"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="metaImageUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Meta Image</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value ? [field.value] : []}
+                        disabled={loading}
+                        onChange={(url) => field.onChange(url)}
+                        onRemove={() => field.onChange("")}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+  </CardContent>
+</Card>
+              
+<Card>
+  <CardHeader>
+    <CardTitle>Product Media</CardTitle>
+    <CardDescription>Product's images and videos</CardDescription>
+  </CardHeader>
+  <CardContent className="space-y-5">
+          <FormField
+                control={form.control}
+                name="youtubeLink"
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <div className="flex space-x-2">
+                        <FormLabel>Youtube Link</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Input placeholder="Enter Youtube Link" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="thumbnailUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Thumbnail Image</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value ? [field.value] : []}
+                        disabled={loading}
+                        onChange={(url) => field.onChange(url)}
+                        onRemove={() => field.onChange("")}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="images" // Use plural to indicate multiple URLs
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Product Images</FormLabel>
+                    <FormControl>
+                      <MultipleImageUpload
+                        value={field.value || []}
+                        disabled={loading}
+                        onChange={(urls) => field.onChange(urls)} // Update the value to an array of URLs
+                        onRemove={(urlToRemove) =>
+                          field.onChange(
+                            field.value!.filter((url) => url !== urlToRemove)
+                          )
+                        } // Remove the specified URL from the array
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+  </CardContent>
+</Card>
+
+             
+
               <Button
                 className={
                   theme == "light"
-                    ? "rounded-lg bg-black text-white hover:bg-slate-800"
-                    : "bg-white text-black hover:bg-slate-300"
+                    ? "rounded-lg bg-black text-white hover:bg-slate-800 w-full"
+                    : "bg-white text-black hover:bg-slate-300 w-full"
                 }
                 type="submit"
               >
-                Submit
+                Create Product
               </Button>
             </form>
           </Form>

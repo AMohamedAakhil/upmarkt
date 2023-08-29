@@ -16,8 +16,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { categorySchema } from "@/server/api/types";
+import { useEffect } from "react";
+import { api } from "@/trpc/client";
 
 export default function ProfileForm() {
+  useEffect(() => {
+    async function checkOnboarding() {
+      const store = await api.store.checkStore.query();
+      if (store) {
+        window.location.href = "/admin";
+      }
+    }
+    checkOnboarding();
+  }, [])
   const { theme } = useTheme();
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),

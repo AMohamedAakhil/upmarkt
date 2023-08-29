@@ -1,12 +1,12 @@
 import React from "react";
 import OnboardingForm from "./OnboardingForm";
-
-const Onboarding = () => {
+import { currentUser } from "@clerk/nextjs";
+const Onboarding = async () => {
+  const user = await currentUser();
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!
   return (
-    <div>
-      <h1>Create your store.</h1>
-      <p>Let's get started.</p>
-      <OnboardingForm />
+    <div className="p-5">
+      <OnboardingForm emailAddress={emailAddress} />
     </div>
   );
 };
