@@ -162,7 +162,7 @@ const ProductForm = () => {
     console.log("Product Res", productRes);
     console.log("submitted");
     console.log(values);
-    //router.push("/admin/products");
+    router.push("/admin/products");
   }
   const categories = useCategory((state) => state.categories);
   const setCategories = useCategory((state) => state.setCategories);
