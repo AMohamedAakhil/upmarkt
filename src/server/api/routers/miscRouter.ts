@@ -5,9 +5,19 @@ import {
   subCategorySchema,
   subSubCategorySchema,
 } from "@/server/api/types";
+import { currentUser } from "@clerk/nextjs";
 
 export const getBrands = publicProcedure.query(async ({ ctx }) => {
-  return ctx.prisma.brand.findMany({});
+  const user = await currentUser();
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+  console.log(emailAddress);
+  return ctx.prisma.brand.findMany({
+    where: {
+      store: {
+        email: emailAddress,
+      }
+    }
+  });
 });
 
 export const createBrand = publicProcedure
@@ -18,10 +28,16 @@ export const createBrand = publicProcedure
     })
   )
   .mutation(async ({ ctx, input }) => {
+    const user = await currentUser();
+    const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+    console.log(emailAddress);
     const res = await ctx.prisma.brand.create({
       data: {
         name: input.name,
         logoUrl: input.logoUrl,
+        store: {
+          connect: {email: emailAddress}
+        }
       },
     });
 
@@ -35,9 +51,17 @@ export const createAttribute = publicProcedure
     })
   )
   .mutation(async ({ ctx, input }) => {
+    const user = await currentUser();
+    const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+    console.log(emailAddress);
     const res = await ctx.prisma.attribute.create({
       data: {
         name: input.name,
+        store: {
+          connect: {
+            email: emailAddress,
+          }
+        }
       },
     });
 
@@ -45,7 +69,16 @@ export const createAttribute = publicProcedure
   });
 
 export const getAttributes = publicProcedure.query(async ({ ctx }) => {
-  return ctx.prisma.attribute.findMany({});
+  const user = await currentUser();
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+  console.log(emailAddress);
+  return ctx.prisma.attribute.findMany({
+    where: {
+      store: {
+        email: emailAddress,
+      }
+    }
+  });
 });
 
 export const createImage = publicProcedure

@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const productSchema = z.object({
-  originType: z.string().optional(),
   name: z.string().optional(),
   description: z.string().optional(),
   warranty: z.string().optional(),
@@ -48,7 +47,6 @@ const variantsSchema = z.record(
 );
 
 export const productFormSchema = z.object({
-  originType: z.string().min(1, "Select Origin Type"),
   name: z.string().min(1, "Enter Product Name"),
   description: z.string().optional(),
   warranty: z.string().optional(),
@@ -82,7 +80,13 @@ export const productFormSchema = z.object({
   orders: z.array(z.string()).optional(),
   storeId: z.string().optional(),
   colorsId: z.array(z.string()).optional(),
-  attributesId: z.array(z.string()).optional(),
+  attributesId: z.array(z.object({
+    name: z.string(),
+    id: z.string(),
+    createdAt: z.date(),
+    storeId: z.string().optional(),
+    updatedAt: z.date(),
+  })).optional(),
   attributeValues: z.record(z.array(z.string())).optional(),
 });
 

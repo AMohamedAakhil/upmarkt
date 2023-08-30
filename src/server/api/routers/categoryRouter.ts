@@ -5,15 +5,24 @@ import {
   subCategorySchema,
   subSubCategorySchema,
 } from "@/server/api/types";
+import { currentUser } from "@clerk/nextjs";
 
 export const createCategory = publicProcedure
   .input(categorySchema)
   .mutation(async ({ ctx, input }) => {
+    const user = await currentUser();
+    const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+    console.log(emailAddress);
     const res = await ctx.prisma.storeCategory.create({
       data: {
         name: input.name,
         priorityNumber: parseInt(input.priorityNumber),
         imageUrl: input.imageUrl,
+        store: {
+          connect: {
+            email: emailAddress,
+          }
+        }
       },
     });
 
@@ -23,6 +32,9 @@ export const createCategory = publicProcedure
 export const createSubCategory = publicProcedure
   .input(subCategorySchema) // Assuming you have a schema for subcategory input
   .mutation(async ({ ctx, input }) => {
+    const user = await currentUser();
+    const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+    console.log(emailAddress);
     const res = await ctx.prisma.storeSubCategory.create({
       data: {
         name: input.name,
@@ -51,7 +63,15 @@ export const createSubSubCategory = publicProcedure
   });
 
 export const getCategories = publicProcedure.query(async ({ ctx }) => {
-  return ctx.prisma.storeCategory.findMany({});
+  const user = await currentUser();
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+  return ctx.prisma.storeCategory.findMany({
+    where: {
+      store: {
+        email: emailAddress,
+      }
+    }
+  });
 });
 
 export const getLastCategory = publicProcedure.query(async ({ ctx }) => {

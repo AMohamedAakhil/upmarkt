@@ -1,16 +1,7 @@
-"use client";
 
 import { UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs";
-import { api } from "@/trpc/server";
-import { CategoryModal } from "@/components/modals/category-modal";
-import { useCategoryModal } from "@/hooks/use-category-modal";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { SubCategoryModal } from "@/components/modals/subcategory-modal";
-import { useSubCategoryModal } from "@/hooks/use-sub-category-modal";
-import { SubCategoryModalProvider } from "@/providers/sub-category-modal-provider";
-import { ModalProvider } from "@/providers/modal-provider";
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 export default function Home() {
   /* Category actions 
@@ -38,15 +29,9 @@ export default function Home() {
   console.log(subCategoryRes);
   console.log(subSubCategoryRes);
   */
-  const onOpen = useCategoryModal((state) => state.onOpen);
-  const subCategoryOnOpen = useSubCategoryModal((state) => state.onOpen);
   return (
-    <main className="">
+    <main className="p-5">
       <UserButton afterSignOutUrl="/" />
-      <ModalProvider />
-      <SubCategoryModalProvider categoryId="clltbzg440000hg74h0619zhm" />
-      <Button onClick={onOpen}>Category</Button>
-      <Button onClick={subCategoryOnOpen}>SubCategory</Button>
     </main>
   );
 }

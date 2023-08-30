@@ -1,5 +1,4 @@
 import React from "react";
-import SamplePage from "./samplePage";
 import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
 export default async function Admin() {
@@ -11,7 +10,6 @@ export default async function Admin() {
     <div className="p-5">
       <h1 className="mb-5 text-xl">Dashboard</h1>
       <div>
-        <SamplePage />
       </div>
     </div>
   );

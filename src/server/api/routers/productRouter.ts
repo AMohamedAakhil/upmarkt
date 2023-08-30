@@ -1,9 +1,13 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { productSchema } from "../types";
+import { currentUser } from "@clerk/nextjs";
+import { z } from "zod";
 
 export const createProduct = publicProcedure
   .input(productSchema)
   .mutation(async ({ ctx, input }) => {
+    const user = await currentUser();
+    const emailAddress = user?.emailAddresses[0]!.emailAddress!;
     const colors = await ctx.prisma.color.findMany({
       where: {
         id: {
@@ -46,15 +50,9 @@ export const createProduct = publicProcedure
         },
       },
     });
-    /* const store = await ctx.prisma.store.findUnique({
-      where: {
-        id: input.storeId,
-      },
-    }); */
 
     const finalRes = await ctx.prisma.product.create({
       data: {
-        originType: input.originType,
         name: input.name,
         description: input.description,
         warranty: input.warranty,
@@ -107,13 +105,11 @@ export const createProduct = publicProcedure
         banners: {
           connect: banners.map((banner) => ({ id: banner.id })),
         },
-        /*...(store && {
-          store: {
+        store: {
             connect: {
-              id: store.id,
+              email: emailAddress,
             },
           },
-        }), */
       },
     });
 
@@ -121,10 +117,37 @@ export const createProduct = publicProcedure
   });
 
 export const getProducts = publicProcedure.query(async ({ ctx }) => {
-  return ctx.prisma.product.findMany({});
+  const user = await currentUser();
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+  console.log(emailAddress);
+  return ctx.prisma.product.findMany({
+    where: {
+      store: {
+        email: emailAddress,
+      }
+    },
+    include: {
+      brand: true,
+    }
+  });
+});
+
+export const getSpecificProduct = publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+  const user = await currentUser();
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+  console.log(emailAddress);
+  return ctx.prisma.product.findUnique({
+    where: {
+      id: input,
+    },
+    include : {
+      images: true,
+    }
+  });
 });
 
 export const productRouter = createTRPCRouter({
   create: createProduct,
   get: getProducts,
+  getSpecific: getSpecificProduct,
 });

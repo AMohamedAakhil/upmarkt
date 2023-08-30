@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { api } from "@/trpc/client";
-import { productFormSchema } from "@/server/api/types";
+import { productFormSchema, productSchema } from "@/server/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -58,13 +58,13 @@ import { AttributeModal } from "@/components/modals/attribute-modal";
 import { AttributeModalProvider } from "@/providers/attribute-modal-provider";
 import { useAttributeModal } from "@/hooks/use-attribute-modal";
 import { useRouter } from "next/navigation";
+import { Product } from "@prisma/client";
+import { Image } from "@prisma/client";
 
-const ProductForm = () => {
+const EditProductForm = ({productId} : {productId: string}) => {
   const { theme } = useTheme();
-
-  const form = useForm<z.infer<typeof productFormSchema>>({
-    resolver: zodResolver(productFormSchema),
-    defaultValues: {
+  type productSchema = z.infer<typeof productSchema>
+  const [originalFormResponse, setOriginalFormResponse] = useState<z.infer<typeof productFormSchema>>({
       name: "",
       description: "",
       warranty: "",
@@ -72,14 +72,14 @@ const ProductForm = () => {
       productCode: "",
       brand: "",
       unit: "",
-      unitPrice: "0",
-      purchasePrice: "0",
-      tax: "0",
-      discount: "0",
+      unitPrice: "",
+      purchasePrice: "",
+      tax: "",
+      discount: "",
       typeOfDiscount: "",
-      totalQuantity: "0",
-      minimumQuantity: "0",
-      shippingCost: "0",
+      totalQuantity: "",
+      minimumQuantity: "",
+      shippingCost: "",
       deliveryDuration: "",
       shippingCostMultiplyByQuantity: "",
       metaTitle: "",
@@ -89,6 +89,35 @@ const ProductForm = () => {
       thumbnailUrl: "",
       images: [],
       subCategoryId: "",
+  });
+
+  const form = useForm<z.infer<typeof productFormSchema>>({
+    resolver: zodResolver(productFormSchema),
+    defaultValues: {
+      name: originalFormResponse.name!,
+      description: originalFormResponse.description!,
+      warranty: originalFormResponse.warranty!,
+      categoryId: originalFormResponse.categoryId!,
+      productCode: originalFormResponse.productCode!,
+      brand: originalFormResponse.brand!,
+      unit: originalFormResponse.unit!,
+      unitPrice: String(originalFormResponse.unitPrice!),
+      purchasePrice: String(originalFormResponse.purchasePrice),
+      tax: String(originalFormResponse.tax!),
+      discount: String(originalFormResponse.discount),
+      typeOfDiscount: originalFormResponse.typeOfDiscount!,
+      totalQuantity: String(originalFormResponse.totalQuantity!),
+      minimumQuantity: String(originalFormResponse.minimumQuantity!),
+      shippingCost: String(originalFormResponse.shippingCost!),
+      deliveryDuration: originalFormResponse.deliveryDuration!,
+      shippingCostMultiplyByQuantity: originalFormResponse.shippingCostMultiplyByQuantity ? "yes" : "no",
+      metaTitle: originalFormResponse.metaTitle ? originalFormResponse.metaTitle : "",
+      metaDescription: originalFormResponse.metaDescription ? originalFormResponse.metaDescription : "",
+      metaImageUrl: originalFormResponse.metaImageUrl ? originalFormResponse.metaImageUrl : "",
+      youtubeLink: originalFormResponse.youtubeLink ? originalFormResponse.youtubeLink : "",
+      thumbnailUrl: originalFormResponse.thumbnailUrl ? originalFormResponse.thumbnailUrl : "",
+      images: originalFormResponse.images ? originalFormResponse.images : [],
+      subCategoryId: originalFormResponse.subCategoryId ? originalFormResponse.subCategoryId : "",
     },
   });
 
@@ -184,10 +213,89 @@ const ProductForm = () => {
     const getCategories = async () => {
       const categoriesRes = await api.category.getCategories.query();
       setCategories(categoriesRes);
-      console.log(categories);
     };
 
+    const getBrands = async () => {
+      const brandsRes = await api.misc.getBrands.query();
+      setBrands(brandsRes);
+    };
+
+    const getAttributes = async () => {
+      const attributesRes = await api.misc.getAttributes.query();
+      setAttributes(attributesRes);
+    };
+
+    const getPreviousFormValues = async () => {
+      const prevFormRes = await api.product.getSpecific.query(productId);
+
+if (prevFormRes) {
+  const {
+    name,
+    description,
+    warranty,
+    categoryId,
+    productCode,
+    brandId,
+    unit,
+    unitPrice,
+    purchasePrice,
+    tax,
+    discount,
+    typeOfDiscount,
+    totalQuantity,
+    minimumQuantity,
+    shippingCost,
+    deliveryDuration,
+    shippingCostMultiplyByQuantity,
+    metaTitle,
+    metaDescription,
+    metaImageUrl,
+    youtubeLink,
+    thumbnailUrl,
+    images,
+    subCategoryId,
+  } = prevFormRes;
+
+  const destructuredRes = {
+    name: name,
+    description,
+    warranty,
+    categoryId,
+    productCode,
+    brand: brandId,
+    unit,
+    unitPrice,
+    purchasePrice,
+    tax,
+    discount,
+    typeOfDiscount,
+    totalQuantity,
+    minimumQuantity,
+    shippingCost,
+    deliveryDuration,
+    shippingCostMultiplyByQuantity,
+    metaTitle,
+    metaDescription,
+    metaImageUrl,
+    youtubeLink,
+    thumbnailUrl,
+    images,
+    subCategoryId,
+
+  }
+  console.log("Destructured", destructuredRes)
+  //setOriginalFormResponse(destructuredRes)
+} else {
+  console.error('API response is empty or invalid.');
+}
+
+      console.log("Prev", prevFormRes)
+    }
+
+    getBrands();
+    getAttributes();
     getCategories();
+    getPreviousFormValues();
   }, []);
 
   useEffect(() => {
@@ -201,23 +309,6 @@ const ProductForm = () => {
 
     getSubCategories();
   }, [categoryId]);
-
-  useEffect(() => {
-    const getBrands = async () => {
-      const brandsRes = await api.misc.getBrands.query();
-      setBrands(brandsRes);
-      console.log(brands);
-    };
-
-    const getAttributes = async () => {
-      const attributesRes = await api.misc.getAttributes.query();
-      setAttributes(attributesRes);
-      console.log("Attri", attributesRes);
-    };
-
-    getBrands();
-    getAttributes();
-  }, []);
 
   const [attributesArray, setAttributesArray] = useState<String[]>([]);
 
@@ -1078,4 +1169,4 @@ const ProductForm = () => {
   );
 };
 
-export default ProductForm;
+export default EditProductForm;
