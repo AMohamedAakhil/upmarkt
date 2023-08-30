@@ -67,7 +67,7 @@ export const productFormSchema = z.object({
   deliveryDuration: z.string().optional(),
   shippingCostMultiplyByQuantity: z.string().optional(),
   status: z.boolean().optional(),
-  images: z.array(z.string().url()).optional(),
+  images: z.array(z.string()).optional(),
   thumbnailUrl: z.string().optional(),
   youtubeLink: z.string().optional(),
   metaTitle: z.string().optional(),

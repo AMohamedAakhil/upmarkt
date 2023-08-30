@@ -7,6 +7,7 @@ import { ImagePlus, Trash } from "lucide-react";
 import axios from "axios";
 import { FileUpload, FileUploadHandlerEvent } from "primereact/fileupload";
 import { useTheme } from "next-themes";
+import { api } from "@/trpc/client";
 
 interface MultipleImageUploadProps {
   disabled?: boolean;
@@ -23,6 +24,7 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>(value);
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -58,8 +60,15 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
           })
       )
     );
+    setUploadedUrls(uploadedUrls);
+    const imageIds = []
 
-    onChange(uploadedUrls);
+    for (const i of uploadedUrls) {
+      const imageDbRes = await api.misc.createImage.mutate({url: i})
+      imageIds.push(imageDbRes.id)
+    }
+    console.log(imageIds)
+    onChange(imageIds);
     setLoading(false);
   };
 
@@ -70,7 +79,7 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   return (
     <div>
       <div className="mb-4 flex items-center gap-4">
-        {value.map((url) => (
+        {uploadedUrls.map((url) => (
           <div
             key={url}
             className="relative h-[400px] w-[400px] overflow-hidden rounded-md"
@@ -127,7 +136,7 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             customUpload
             uploadHandler={(e) => onUpload(e)}
             accept="image/*"
-            maxFileSize={1000000}
+            maxFileSize={10000000}
             emptyTemplate={
               <p className="m-0">Drag and drop files to here to upload.</p>
             }

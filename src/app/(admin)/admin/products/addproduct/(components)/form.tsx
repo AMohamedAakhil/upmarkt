@@ -159,11 +159,10 @@ const ProductForm = () => {
     };
 
     const productRes = await api.product.create.mutate(acceptedValues);
-    // ✅ This will be type-safe and validated.
     console.log("Product Res", productRes);
     console.log("submitted");
     console.log(values);
-    router.push("/admin/products");
+    //router.push("/admin/products");
   }
   const categories = useCategory((state) => state.categories);
   const setCategories = useCategory((state) => state.setCategories);

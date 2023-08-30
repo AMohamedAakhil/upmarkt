@@ -29,13 +29,7 @@ export const createProduct = publicProcedure
         },
       },
     });
-    const images = await ctx.prisma.variant.findMany({
-      where: {
-        id: {
-          in: input.images,
-        },
-      },
-    });
+
     const banners = await ctx.prisma.banner.findMany({
       where: {
         id: {
@@ -91,9 +85,9 @@ export const createProduct = publicProcedure
         deliveryDuration: input.deliveryDuration,
         shippingCostMultiplyByQuantity:
           input.shippingCostMultiplyByQuantity === "yes",
-        images: {
-          connect: images.map((image) => ({ id: image.id })),
-        },
+          images: {
+            connect: input.images!.map(imageId => ({ id: imageId })),
+          },
         thumbnailUrl: input.thumbnailUrl,
         youtubeLink: input.youtubeLink,
         metaTitle: input.metaTitle,
