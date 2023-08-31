@@ -32,7 +32,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useDeleteModal } from "@/hooks/use-delete-modal";
-import { DeleteModalProvider } from "@/providers/delete-product-modal-provider";
 import { toast } from "react-hot-toast";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
