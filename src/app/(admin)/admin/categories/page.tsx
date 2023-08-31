@@ -8,7 +8,6 @@ import { useTheme } from "next-themes";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,7 +28,6 @@ export default function ProfileForm() {
     }
     checkOnboarding();
   }, []);
-  const { theme } = useTheme();
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
