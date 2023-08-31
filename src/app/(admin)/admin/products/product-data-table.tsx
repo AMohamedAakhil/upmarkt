@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { api } from "@/trpc/client";
 import { ColumnDef } from "@tanstack/react-table"
 import { DataTable } from "@/components/ui/data-table";
@@ -9,7 +9,19 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+import { useTheme } from "next-themes";
 
 import {
   DropdownMenu,
@@ -19,7 +31,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
- 
+import { useDeleteModal } from "@/hooks/use-delete-modal";
+import { DeleteModalProvider } from "@/providers/delete-product-modal-provider";
+import { toast } from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { DeleteProductModal } from "@/components/modals/delete-product-modal";
+
 type ProductSubset = {
   id: string | null;
   name: string | undefined | null;
@@ -31,9 +49,29 @@ type ProductSubset = {
 };
 
 const ProductDataTable = async () => {
-
+  const [loading, setLoading] = useState(false);
+  const onOpen = useDeleteModal((state) => state.onOpen);
+  const {theme} = useTheme();
+  const {toast} = useToast();
   const data = await api.product.get.query();
-
+  const handleDelete = async (productId: string, productName: string) => {
+    const deleteRes = await api.product.delete.query(productId)
+    console.log(deleteRes)
+    if (deleteRes) {
+      toast({
+        title: `Deleted Product: ${productName}  `,
+        description: `Product has been permanently deleted from the database`,
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
+    
+  }
   const subsetData: ProductSubset[] = data.map(item => ({
     id: item.id,
     name: item.name,
@@ -139,11 +177,12 @@ const ProductDataTable = async () => {
                 >
                   Edit Product
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => window.location.assign(`/admin/products/${product.id}`)}
+                <Button
+                  onClick={onOpen}
                 >
                   Delete Product
-                </DropdownMenuItem>
+                </Button>
+              <DeleteProductModal productId={product.id!} />
               </DropdownMenuContent>
             </DropdownMenu>
           )
@@ -165,7 +204,7 @@ const ProductDataTable = async () => {
         <Link href="/admin/products/addproduct">Add Product</Link>
       </Button>
     </div>
-    <Separator className="mt-5 border-2" />
+    <Separator className="mt-5" />
     <DataTable columns={columns} data={subsetData} filterFor="name" />
     </div>
     </Suspense>

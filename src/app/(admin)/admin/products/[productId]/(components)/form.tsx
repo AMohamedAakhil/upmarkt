@@ -61,69 +61,41 @@ import { useRouter } from "next/navigation";
 import { Product } from "@prisma/client";
 import { Image } from "@prisma/client";
 
-const EditProductForm = ({productId} : {productId: string}) => {
+const EditProductForm = ({productId, previousFormValues} : {productId: string, previousFormValues: any}) => {
   const { theme } = useTheme();
-  type productSchema = z.infer<typeof productSchema>
-  const [originalFormResponse, setOriginalFormResponse] = useState<z.infer<typeof productFormSchema>>({
-      name: "",
-      description: "",
-      warranty: "",
-      categoryId: "",
-      productCode: "",
-      brand: "",
-      unit: "",
-      unitPrice: "",
-      purchasePrice: "",
-      tax: "",
-      discount: "",
-      typeOfDiscount: "",
-      totalQuantity: "",
-      minimumQuantity: "",
-      shippingCost: "",
-      deliveryDuration: "",
-      shippingCostMultiplyByQuantity: "",
-      metaTitle: "",
-      metaDescription: "",
-      metaImageUrl: "",
-      youtubeLink: "",
-      thumbnailUrl: "",
-      images: [],
-      subCategoryId: "",
-  });
 
   const form = useForm<z.infer<typeof productFormSchema>>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
-      name: originalFormResponse.name!,
-      description: originalFormResponse.description!,
-      warranty: originalFormResponse.warranty!,
-      categoryId: originalFormResponse.categoryId!,
-      productCode: originalFormResponse.productCode!,
-      brand: originalFormResponse.brand!,
-      unit: originalFormResponse.unit!,
-      unitPrice: String(originalFormResponse.unitPrice!),
-      purchasePrice: String(originalFormResponse.purchasePrice),
-      tax: String(originalFormResponse.tax!),
-      discount: String(originalFormResponse.discount),
-      typeOfDiscount: originalFormResponse.typeOfDiscount!,
-      totalQuantity: String(originalFormResponse.totalQuantity!),
-      minimumQuantity: String(originalFormResponse.minimumQuantity!),
-      shippingCost: String(originalFormResponse.shippingCost!),
-      deliveryDuration: originalFormResponse.deliveryDuration!,
-      shippingCostMultiplyByQuantity: originalFormResponse.shippingCostMultiplyByQuantity ? "yes" : "no",
-      metaTitle: originalFormResponse.metaTitle ? originalFormResponse.metaTitle : "",
-      metaDescription: originalFormResponse.metaDescription ? originalFormResponse.metaDescription : "",
-      metaImageUrl: originalFormResponse.metaImageUrl ? originalFormResponse.metaImageUrl : "",
-      youtubeLink: originalFormResponse.youtubeLink ? originalFormResponse.youtubeLink : "",
-      thumbnailUrl: originalFormResponse.thumbnailUrl ? originalFormResponse.thumbnailUrl : "",
-      images: originalFormResponse.images ? originalFormResponse.images : [],
-      subCategoryId: originalFormResponse.subCategoryId ? originalFormResponse.subCategoryId : "",
+      name: previousFormValues.name ? previousFormValues.name : "",
+      description: previousFormValues.description ? previousFormValues.description : "",
+      warranty: previousFormValues.warranty ? previousFormValues.warranty : "",
+      categoryId: previousFormValues.categoryId ? previousFormValues.categoryId : "",
+      productCode: previousFormValues.productCode ? previousFormValues.productCode : "",
+      brandId: previousFormValues.brandId ? previousFormValues.brandId : "",
+      unit: previousFormValues.unit  ? previousFormValues.unit : "",
+      unitPrice: String(previousFormValues.unitPrice ? previousFormValues.unitPrice : ""),
+      purchasePrice: String(previousFormValues.purchasePrice),
+      tax: String(previousFormValues.tax ? previousFormValues.tax : ""),
+      discount: String(previousFormValues.discount),
+      typeOfDiscount: previousFormValues.typeOfDiscount ? previousFormValues.typeOfDiscount : "",
+      totalQuantity: String(previousFormValues.totalQuantity ? previousFormValues.totalQuantity : ""),
+      minimumQuantity: String(previousFormValues.minimumQuantity ? previousFormValues.minimumQuantity : ""),
+      shippingCost: String(previousFormValues.shippingCost ? previousFormValues.shippingCost : ""),
+      deliveryDuration: previousFormValues.deliveryDuration ? previousFormValues.deliveryDuration : "",
+      shippingCostMultiplyByQuantity: previousFormValues.shippingCostMultiplyByQuantity ? "yes" : "no",
+      metaTitle: previousFormValues.metaTitle ? previousFormValues.metaTitle : "",
+      metaDescription: previousFormValues.metaDescription ? previousFormValues.metaDescription : "",
+      metaImageUrl: previousFormValues.metaImageUrl ? previousFormValues.metaImageUrl : "",
+      youtubeLink: previousFormValues.youtubeLink ? previousFormValues.youtubeLink : "",
+      thumbnailUrl: previousFormValues.thumbnailUrl ? previousFormValues.thumbnailUrl : "",
+      images: previousFormValues.images ? [...previousFormValues.images.map((item: any) => item.url)] : [],
+      subCategoryId: previousFormValues.subCategoryId ? previousFormValues.subCategoryId : "",
     },
   });
 
-  const { watch, setValue, getValues } = form;
+  const { watch, setValue } = form;
   const categoryId = watch("categoryId");
-  const attributesId = watch("attributesId");
   const onCategoryOpen = useCategoryModal((state) => state.onOpen);
   const onSubcategoryOpen = useSubCategoryModal((state) => state.onOpen);
   const onAttributeOpen = useAttributeModal((state) => state.onOpen);
@@ -138,7 +110,7 @@ const EditProductForm = ({productId} : {productId: string}) => {
       warranty,
       categoryId,
       productCode,
-      brand,
+      brandId,
       unit,
       unitPrice,
       purchasePrice,
@@ -160,12 +132,13 @@ const EditProductForm = ({productId} : {productId: string}) => {
     } = values;
 
     const acceptedValues = {
+      id: productId,
       name,
       description,
       warranty,
       categoryId,
       productCode,
-      brandId: brand,
+      brandId: brandId,
       unit,
       unitPrice: parseInt(unitPrice === undefined ? "0" : unitPrice),
       purchasePrice: parseInt(purchasePrice || "0"),
@@ -187,8 +160,7 @@ const EditProductForm = ({productId} : {productId: string}) => {
       attributesId: attributes.map((item: {id: string}) => item.id),
     };
 
-    const productRes = await api.product.create.mutate(acceptedValues);
-    // ✅ This will be type-safe and validated.
+    const productRes = await api.product.update.mutate(acceptedValues);
     console.log("Product Res", productRes);
     console.log("submitted");
     console.log(values);
@@ -225,77 +197,9 @@ const EditProductForm = ({productId} : {productId: string}) => {
       setAttributes(attributesRes);
     };
 
-    const getPreviousFormValues = async () => {
-      const prevFormRes = await api.product.getSpecific.query(productId);
-
-if (prevFormRes) {
-  const {
-    name,
-    description,
-    warranty,
-    categoryId,
-    productCode,
-    brandId,
-    unit,
-    unitPrice,
-    purchasePrice,
-    tax,
-    discount,
-    typeOfDiscount,
-    totalQuantity,
-    minimumQuantity,
-    shippingCost,
-    deliveryDuration,
-    shippingCostMultiplyByQuantity,
-    metaTitle,
-    metaDescription,
-    metaImageUrl,
-    youtubeLink,
-    thumbnailUrl,
-    images,
-    subCategoryId,
-  } = prevFormRes;
-
-  const destructuredRes = {
-    name: name,
-    description,
-    warranty,
-    categoryId,
-    productCode,
-    brand: brandId,
-    unit,
-    unitPrice,
-    purchasePrice,
-    tax,
-    discount,
-    typeOfDiscount,
-    totalQuantity,
-    minimumQuantity,
-    shippingCost,
-    deliveryDuration,
-    shippingCostMultiplyByQuantity,
-    metaTitle,
-    metaDescription,
-    metaImageUrl,
-    youtubeLink,
-    thumbnailUrl,
-    images,
-    subCategoryId,
-
-  }
-  console.log("Destructured", destructuredRes)
-  //setOriginalFormResponse(destructuredRes)
-} else {
-  console.error('API response is empty or invalid.');
-}
-
-      console.log("Prev", prevFormRes)
-    }
-
     getBrands();
     getAttributes();
     getCategories();
-    getPreviousFormValues();
   }, []);
 
   useEffect(() => {
@@ -569,7 +473,7 @@ if (prevFormRes) {
 
                   <FormField
                     control={form.control}
-                    name="brand"
+                    name="brandId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Brand</FormLabel>
@@ -1101,6 +1005,7 @@ if (prevFormRes) {
                           <MultipleImageUpload
                             value={field.value || []}
                             disabled={loading}
+                            existingUrls={previousFormValues.images}
                             onChange={(urls) => field.onChange(urls)} // Update the value to an array of URLs
                             onRemove={(urlToRemove) =>
                               field.onChange(
@@ -1126,7 +1031,7 @@ if (prevFormRes) {
                 }
                 type="submit"
               >
-                Create Product
+                Update Product
               </Button>
             </form>
           </Form>

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import AdminNavbar from "./(components)/admin-navbar";
 import { ModalProvider } from "@/providers/modal-provider";
+import { api } from "@/trpc/server";
+import { redirect } from "next/navigation";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,7 +17,7 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;

@@ -178,7 +178,7 @@ model Color {
 
 model Image {
   id              String  @id @default(cuid())
-  url             String
+  url             String @unique
   productImages   Product? @relation("productImages", fields: [productImagesId], references: [id])
   productImagesId String?
 

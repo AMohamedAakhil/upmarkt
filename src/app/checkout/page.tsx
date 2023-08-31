@@ -7,8 +7,8 @@ import { useState } from "react";
 interface Order {
   id: string;
   date: Date;
-  userId: String;
-  status: String;
+  userId: string;
+  status: string;
   total: number;
   createdAt: Date;
   updatedAt: Date;

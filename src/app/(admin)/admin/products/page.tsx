@@ -8,6 +8,7 @@ const Products = async () => {
   if (!onboarded) {
     redirect("/admin/onboarding");
   }
+
   return (
 <>
 <ProductDataTable />

@@ -14,6 +14,8 @@ import { headers } from "next/headers";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "@/server/db";
+import { currentUser } from "@clerk/nextjs";
+
 
 /**
  * 1. CONTEXT
@@ -50,7 +52,7 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (opts: FetchCreateContextFnOptions) => {
+export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
   // Fetch stuff that depends on the request
 
   return createInnerTRPCContext({

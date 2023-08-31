@@ -8,13 +8,7 @@ export const createProduct = publicProcedure
   .mutation(async ({ ctx, input }) => {
     const user = await currentUser();
     const emailAddress = user?.emailAddresses[0]!.emailAddress!;
-    const colors = await ctx.prisma.color.findMany({
-      where: {
-        id: {
-          in: input.colorsId,
-        },
-      },
-    });
+
     const attributes = await ctx.prisma.attribute.findMany({
       where: {
         id: {
@@ -22,28 +16,7 @@ export const createProduct = publicProcedure
         },
       },
     });
-    const variants = await ctx.prisma.variant.findMany({
-      where: {
-        id: {
-          in: input.variantsId,
-        },
-      },
-    });
 
-    const banners = await ctx.prisma.banner.findMany({
-      where: {
-        id: {
-          in: input.bannersId,
-        },
-      },
-    });
-    const reviews = await ctx.prisma.customerReview.findMany({
-      where: {
-        id: {
-          in: input.reviews,
-        },
-      },
-    });
 
     const finalRes = await ctx.prisma.product.create({
       data: {
@@ -65,9 +38,6 @@ export const createProduct = publicProcedure
           connect: { id: input.brandId },
         },
         unit: input.unit,
-        colors: {
-          connect: colors.map((color) => ({ id: color.id })),
-        },
         attributes: {
           connect: attributes.map((attribute) => ({ id: attribute.id })),
         },
@@ -76,29 +46,19 @@ export const createProduct = publicProcedure
         tax: input.tax,
         discount: input.discount,
         typeOfDiscount: input.typeOfDiscount,
-        variants: {
-          connect: variants.map((variant) => ({ id: variant.id })),
-        },
         totalQuantity: input.totalQuantity,
         minimumQuantity: input.minimumQuantity,
         shippingCost: input.shippingCost,
         deliveryDuration: input.deliveryDuration,
-        shippingCostMultiplyByQuantity:
-          input.shippingCostMultiplyByQuantity === "yes",
-          images: {
-            connect: input.images!.map(imageId => ({ id: imageId })),
+        shippingCostMultiplyByQuantity: input.shippingCostMultiplyByQuantity === "yes",
+        images: {
+            connect: input.images?.map(imageId => ({ url: imageId })),
           },
         thumbnailUrl: input.thumbnailUrl,
         youtubeLink: input.youtubeLink,
         metaTitle: input.metaTitle,
         metaDescription: input.metaDescription,
         metaImageUrl: input.metaImageUrl,
-        reviews: {
-          connect: reviews.map((review) => ({ id: review.id })),
-        },
-        banners: {
-          connect: banners.map((banner) => ({ id: banner.id })),
-        },
         store: {
             connect: {
               email: emailAddress,
@@ -109,6 +69,68 @@ export const createProduct = publicProcedure
 
     console.log(finalRes);
   });
+
+  
+export const updateProduct = publicProcedure
+.input(productSchema)
+.mutation(async ({ ctx, input }) => {  
+  const attributes = await ctx.prisma.attribute.findMany({
+    where: {
+      id: {
+        in: input.attributesId,
+      },
+    },
+  });
+
+  const finalRes = await ctx.prisma.product.update({
+    where: {
+      id: input.id,
+    },
+    data: {
+      name: input.name,
+      description: input.description,
+      warranty: input.warranty,
+      ...(input.categoryId !== "" && {
+        categories: {
+          connect: { id: input.categoryId },
+        },
+      }),
+      ...(input.subCategoryId !== "" && {
+        subCategories: {
+          connect: { id: input.subCategoryId },
+        },
+      }),
+      productCode: input.productCode,
+      brand: {
+        connect: { id: input.brandId },
+      },
+      unit: input.unit,
+      attributes: {
+        set: attributes.map((attribute) => ({ id: attribute.id })),
+      },
+      unitPrice: input.unitPrice,
+      purchasePrice: input.purchasePrice,
+      tax: input.tax,
+      discount: input.discount,
+      typeOfDiscount: input.typeOfDiscount,
+      totalQuantity: input.totalQuantity,
+      minimumQuantity: input.minimumQuantity,
+      shippingCost: input.shippingCost,
+      deliveryDuration: input.deliveryDuration,
+      shippingCostMultiplyByQuantity: input.shippingCostMultiplyByQuantity === "yes" ? true : false,
+      images: {
+        set: input.images?.map(imageId => ({ url: imageId })),
+      },      
+      thumbnailUrl: input.thumbnailUrl,
+      youtubeLink: input.youtubeLink,
+      metaTitle: input.metaTitle,
+      metaDescription: input.metaDescription,
+      metaImageUrl: input.metaImageUrl,
+    },
+  });
+
+  console.log(finalRes);
+});
 
 export const getProducts = publicProcedure.query(async ({ ctx }) => {
   const user = await currentUser();
@@ -134,14 +156,37 @@ export const getSpecificProduct = publicProcedure.input(z.string()).query(async 
     where: {
       id: input,
     },
-    include : {
+    include: {
       images: true,
     }
   });
+});
+
+export const deleteProduct = publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+  const user = await currentUser();
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+  const verifyRes = await ctx.prisma.store.findUnique({
+    where: {
+        email: emailAddress
+    }
+  })
+
+  if (verifyRes) {
+    return ctx.prisma.product.delete({
+      where: {
+        id: input,
+      }
+    });
+  } else {
+    return false;
+  }
+  
 });
 
 export const productRouter = createTRPCRouter({
   create: createProduct,
   get: getProducts,
   getSpecific: getSpecificProduct,
+  update: updateProduct,
+  delete: deleteProduct,
 });

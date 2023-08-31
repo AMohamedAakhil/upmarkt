@@ -8,12 +8,14 @@ import axios from "axios";
 import { FileUpload, FileUploadHandlerEvent } from "primereact/fileupload";
 import { useTheme } from "next-themes";
 import { api } from "@/trpc/client";
+import { Image as ImageType } from "@prisma/client";
 
 interface MultipleImageUploadProps {
   disabled?: boolean;
   onChange: (value: string[]) => void; // Updated onChange to accept an array
   onRemove: (value: string) => void;
   value: string[];
+  existingUrls: string[];
 }
 
 const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
@@ -21,14 +23,15 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   onChange,
   onRemove,
   value,
+  existingUrls,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [uploadedUrls, setUploadedUrls] = useState<string[]>(value);
   useEffect(() => {
     setIsMounted(true);
   }, []);
   const { theme } = useTheme();
+  console.log(value);
 
   const onUpload = async (e: FileUploadHandlerEvent) => {
     setLoading(true);
@@ -60,15 +63,12 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
           })
       )
     );
-    setUploadedUrls(uploadedUrls);
-    const imageIds = []
 
     for (const i of uploadedUrls) {
       const imageDbRes = await api.misc.createImage.mutate({url: i})
-      imageIds.push(imageDbRes.id)
+      console.log(imageDbRes);
     }
-    console.log(imageIds)
-    onChange(imageIds);
+    onChange(uploadedUrls);
     setLoading(false);
   };
 
@@ -79,7 +79,8 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   return (
     <div>
       <div className="mb-4 flex items-center gap-4">
-        {uploadedUrls.map((url) => (
+        {value.length > 0 ? <>
+          {value.map((url) => (
           <div
             key={url}
             className="relative h-[400px] w-[400px] overflow-hidden rounded-md"
@@ -97,6 +98,9 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
             <Image fill className="object-cover" alt="Image" src={url} />
           </div>
         ))}
+        
+        </> : <></>}
+        
       </div>
       {loading ? (
         <>

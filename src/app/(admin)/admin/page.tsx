@@ -6,6 +6,7 @@ export default async function Admin() {
   if (!onboarded) {
     redirect("/admin/onboarding");
   }
+
   return (
     <div className="p-5">
       <h1 className="mb-5 text-xl">Dashboard</h1>

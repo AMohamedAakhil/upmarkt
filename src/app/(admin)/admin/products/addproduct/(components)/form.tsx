@@ -70,7 +70,7 @@ const ProductForm = () => {
       warranty: "",
       categoryId: "",
       productCode: "",
-      brand: "",
+      brandId: "",
       unit: "",
       unitPrice: "0",
       purchasePrice: "0",
@@ -109,7 +109,7 @@ const ProductForm = () => {
       warranty,
       categoryId,
       productCode,
-      brand,
+      brandId,
       unit,
       unitPrice,
       purchasePrice,
@@ -136,7 +136,7 @@ const ProductForm = () => {
       warranty,
       categoryId,
       productCode,
-      brandId: brand,
+      brandId: brandId,
       unit,
       unitPrice: parseInt(unitPrice === undefined ? "0" : unitPrice),
       purchasePrice: parseInt(purchasePrice || "0"),
@@ -477,7 +477,7 @@ const ProductForm = () => {
 
                   <FormField
                     control={form.control}
-                    name="brand"
+                    name="brandId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Brand</FormLabel>
@@ -1009,6 +1009,7 @@ const ProductForm = () => {
                           <MultipleImageUpload
                             value={field.value || []}
                             disabled={loading}
+                            existingUrls={[]}
                             onChange={(urls) => field.onChange(urls)} // Update the value to an array of URLs
                             onRemove={(urlToRemove) =>
                               field.onChange(

@@ -1,12 +1,13 @@
 import React from 'react'
 import EditProductForm from './(components)/form'
+import { api } from '@/trpc/server'
 
-const EditProduct = ({params}: {params: {productId: string}}) => {
+const EditProduct = async ({params}: {params: {productId: string}}) => {
   const {productId} = params
-  console.log(productId)
+  const prevFormRes = await api.product.getSpecific.query(productId);
   return (
     <div>
-        <EditProductForm productId={productId} />
+        <EditProductForm productId={productId} previousFormValues={prevFormRes} />
     </div>
   )
 }
