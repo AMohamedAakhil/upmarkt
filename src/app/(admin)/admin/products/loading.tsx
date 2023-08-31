@@ -1,19 +1,19 @@
-import { Skeleton } from '@/components/ui/skeleton'
-import React from 'react'
+import { Skeleton } from "@/components/ui/skeleton";
+import React from "react";
 
 const Loading = () => {
   return (
     <div className="p-5">
-        <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
-        <Skeleton className="w-[300px] h-[50px] rounded-md" />
-        <Skeleton className="w-[200px] h-[20px] rounded-md mt-2" />
+          <Skeleton className="h-[50px] w-[300px] rounded-md" />
+          <Skeleton className="mt-2 h-[20px] w-[200px] rounded-md" />
         </div>
-        <Skeleton className="w-[150px] h-[40px] rounded-md mt-2" />
-        </div>
-        <Skeleton className="w-full h-screen rounded-md mt-5" />
+        <Skeleton className="mt-2 h-[40px] w-[150px] rounded-md" />
+      </div>
+      <Skeleton className="mt-5 h-screen w-full rounded-md" />
     </div>
-  )
-}
+  );
+};
 
-export default Loading
+export default Loading;

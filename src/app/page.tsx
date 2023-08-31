@@ -1,7 +1,5 @@
-
 import { UserButton } from "@clerk/nextjs";
-import { Skeleton } from "@/components/ui/skeleton"
-
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
   /* Category actions 

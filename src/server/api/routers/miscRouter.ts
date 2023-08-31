@@ -15,8 +15,8 @@ export const getBrands = publicProcedure.query(async ({ ctx }) => {
     where: {
       store: {
         email: emailAddress,
-      }
-    }
+      },
+    },
   });
 });
 
@@ -36,8 +36,8 @@ export const createBrand = publicProcedure
         name: input.name,
         logoUrl: input.logoUrl,
         store: {
-          connect: {email: emailAddress}
-        }
+          connect: { email: emailAddress },
+        },
       },
     });
 
@@ -60,8 +60,8 @@ export const createAttribute = publicProcedure
         store: {
           connect: {
             email: emailAddress,
-          }
-        }
+          },
+        },
       },
     });
 
@@ -76,8 +76,8 @@ export const getAttributes = publicProcedure.query(async ({ ctx }) => {
     where: {
       store: {
         email: emailAddress,
-      }
-    }
+      },
+    },
   });
 });
 

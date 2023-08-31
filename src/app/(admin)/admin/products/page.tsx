@@ -10,9 +10,9 @@ const Products = async () => {
   }
 
   return (
-<>
-<ProductDataTable />
-</>
+    <>
+      <ProductDataTable />
+    </>
   );
 };
 

@@ -10,8 +10,7 @@ export default async function Admin() {
   return (
     <div className="p-5">
       <h1 className="mb-5 text-xl">Dashboard</h1>
-      <div>
-      </div>
+      <div></div>
     </div>
   );
 }
