@@ -89,6 +89,7 @@ const ProductForm = () => {
       thumbnailUrl: "",
       images: [],
       subCategoryId: "",
+      attributeValues: {},
     },
   });
 
@@ -128,6 +129,7 @@ const ProductForm = () => {
       thumbnailUrl,
       images,
       subCategoryId,
+      attributeValues,
     } = values;
 
     const acceptedValues = {
@@ -156,6 +158,7 @@ const ProductForm = () => {
       images,
       subCategoryId,
       attributesId: attributes.map((item: {id: string}) => item.id),
+      attributeValues,
     };
 
     const productRes = await api.product.create.mutate(acceptedValues);

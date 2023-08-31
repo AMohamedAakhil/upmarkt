@@ -94,6 +94,8 @@ const EditProductForm = ({productId, previousFormValues} : {productId: string, p
     },
   });
 
+  console.log("Previous form state", previousFormValues)
+
   const { watch, setValue } = form;
   const categoryId = watch("categoryId");
   const onCategoryOpen = useCategoryModal((state) => state.onOpen);
@@ -129,6 +131,7 @@ const EditProductForm = ({productId, previousFormValues} : {productId: string, p
       thumbnailUrl,
       images,
       subCategoryId,
+      attributeValues,
     } = values;
 
     const acceptedValues = {
@@ -158,6 +161,7 @@ const EditProductForm = ({productId, previousFormValues} : {productId: string, p
       images,
       subCategoryId,
       attributesId: attributes.map((item: {id: string}) => item.id),
+      attributeValues,
     };
 
     const productRes = await api.product.update.mutate(acceptedValues);
@@ -194,13 +198,14 @@ const EditProductForm = ({productId, previousFormValues} : {productId: string, p
 
     const getAttributes = async () => {
       const attributesRes = await api.misc.getAttributes.query();
-      setAttributes(attributesRes);
+      setAttributes(attributesRes);      
     };
 
     getBrands();
     getAttributes();
     getCategories();
   }, []);
+
 
   useEffect(() => {
     const getSubCategories = async () => {

@@ -117,6 +117,7 @@ model Product {
   unit                           String?
   colors                         Color[]
   attributes                     Attribute[]
+  attributeValues Json?
   unitPrice                      Float?
   purchasePrice                  Float?
   tax                            Float?
