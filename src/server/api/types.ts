@@ -36,7 +36,6 @@ export const productSchema = z.object({
   colorsId: z.array(z.string()).optional(),
   attributesId: z.array(z.string()).optional(),
   variantsId: z.array(z.string()).optional(),
-  attributeValues: z.record(z.array(z.string())).optional(),
 });
 /*
 const variantsSchema = z.record(
