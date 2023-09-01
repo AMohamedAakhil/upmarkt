@@ -50,7 +50,6 @@ type ProductSubset = {
 const ProductDataTable = async () => {
   const [loading, setLoading] = useState(false);
   const onOpen = useDeleteModal((state) => state.onOpen);
-  const {theme} = useTheme();
   const {toast} = useToast();
   const data = await api.product.get.query();
   const handleDelete = async (productId: string, productName: string) => {

@@ -25,15 +25,7 @@ const AdminNavbar = () => {
             const isActive = pathname === link.href;
             return (
               <Link
-                className={
-                  isActive
-                    ? theme === "light"
-                      ? "text-black"
-                      : "text-white"
-                    : theme === "light"
-                    ? "text-slate-500"
-                    : "text-slate-500"
-                }
+                className={isActive?" text-black dark:text-white" : "text-slate-500 hover:text-slate-300"}
                 href={link.href}
                 key={link.name}
               >
