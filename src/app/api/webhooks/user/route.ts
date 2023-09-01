@@ -38,6 +38,7 @@ async function handler(request: Request) {
       data: {
         clerkId: id as string,
         attributes: attributes,
+        email: attributes?.emailAddresses[0]!.emailAddress!,
       },
     });
 
