@@ -21,8 +21,8 @@ export const createCategory = publicProcedure
         store: {
           connect: {
             email: emailAddress,
-          }
-        }
+          },
+        },
       },
     });
 
@@ -69,8 +69,8 @@ export const getCategories = publicProcedure.query(async ({ ctx }) => {
     where: {
       store: {
         email: emailAddress,
-      }
-    }
+      },
+    },
   });
 });
 

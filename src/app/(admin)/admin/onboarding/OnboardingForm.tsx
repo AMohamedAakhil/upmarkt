@@ -31,7 +31,7 @@ import "primereact/resources/primereact.min.css";
 import { storeSchema } from "@/server/api/types";
 import { api } from "@/trpc/client";
 import { currentUser } from "@clerk/nextjs";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 const OnboardingForm = ({ emailAddress }: { emailAddress: string }) => {
   useEffect(() => {
@@ -45,7 +45,7 @@ const OnboardingForm = ({ emailAddress }: { emailAddress: string }) => {
   }, []);
 
   const { theme } = useTheme();
-  const router = useRouter()
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
@@ -67,7 +67,9 @@ const OnboardingForm = ({ emailAddress }: { emailAddress: string }) => {
     setLoading(true);
 
     const storeRes = await api.store.createStore.mutate(values);
+    const roleRes = await api.clerk.setRole.mutate("admin")
     console.log(storeRes);
+    console.log(roleRes);
     console.log(values);
     setLoading(false);
     router.push("/admin");

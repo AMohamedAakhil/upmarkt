@@ -65,7 +65,7 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
     );
 
     for (const i of uploadedUrls) {
-      const imageDbRes = await api.misc.createImage.mutate({url: i})
+      const imageDbRes = await api.misc.createImage.mutate({ url: i });
       console.log(imageDbRes);
     }
     onChange(uploadedUrls);
@@ -79,28 +79,30 @@ const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   return (
     <div>
       <div className="mb-4 flex items-center gap-4">
-        {value.length > 0 ? <>
-          {value.map((url) => (
-          <div
-            key={url}
-            className="relative h-[400px] w-[400px] overflow-hidden rounded-md"
-          >
-            <div className="absolute right-2 top-2 z-10">
-              <Button
-                type="button"
-                onClick={() => onRemove(url)}
-                variant="destructive"
-                size="sm"
+        {value.length > 0 ? (
+          <>
+            {value.map((url) => (
+              <div
+                key={url}
+                className="relative h-[400px] w-[400px] overflow-hidden rounded-md"
               >
-                <Trash className="h-4 w-4" />
-              </Button>
-            </div>
-            <Image fill className="object-cover" alt="Image" src={url} />
-          </div>
-        ))}
-        
-        </> : <></>}
-        
+                <div className="absolute right-2 top-2 z-10">
+                  <Button
+                    type="button"
+                    onClick={() => onRemove(url)}
+                    variant="destructive"
+                    size="sm"
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
+                </div>
+                <Image fill className="object-cover" alt="Image" src={url} />
+              </div>
+            ))}
+          </>
+        ) : (
+          <></>
+        )}
       </div>
       {loading ? (
         <>

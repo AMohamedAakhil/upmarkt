@@ -82,13 +82,17 @@ export const productFormSchema = z.object({
   orders: z.array(z.string()).optional(),
   storeId: z.string().optional(),
   colorsId: z.array(z.string()).optional(),
-  attributesId: z.array(z.object({
-    name: z.string(),
-    id: z.string(),
-    createdAt: z.date(),
-    storeId: z.string().optional(),
-    updatedAt: z.date(),
-  })).optional(),
+  attributesId: z
+    .array(
+      z.object({
+        name: z.string(),
+        id: z.string(),
+        createdAt: z.date(),
+        storeId: z.string().optional(),
+        updatedAt: z.date(),
+      })
+    )
+    .optional(),
   attributeValues: z.record(z.array(z.string())).optional(),
 });
 

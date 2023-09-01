@@ -5,11 +5,9 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ModeToggle } from "@/components/ui/toggle-theme";
-import { useTheme } from "next-themes";
 
 const AdminNavbar = () => {
   const pathname = usePathname();
-  const { theme } = useTheme();
   const navLinks = [
     { name: "Dashboard", href: "/admin" },
     { name: "Products", href: "/admin/products" },
@@ -25,7 +23,10 @@ const AdminNavbar = () => {
             const isActive = pathname === link.href;
             return (
               <Link
-                className={isActive?" text-black dark:text-white" : "text-slate-500 hover:text-slate-300"}
+                className={
+                  isActive
+                    ? "text-black dark:text-white" : "text-slate-500 hover:text-slate-700 hover:dark:text-slate-300"
+                }
                 href={link.href}
                 key={link.name}
               >

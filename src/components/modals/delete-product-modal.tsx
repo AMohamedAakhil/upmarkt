@@ -10,7 +10,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useDeleteModal } from "@/hooks/use-delete-modal";
 
-export const DeleteProductModal = ({productId} : {productId: string}) => {
+export const DeleteProductModal = ({ productId }: { productId: string }) => {
   const storeModal = useDeleteModal();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -46,23 +46,23 @@ export const DeleteProductModal = ({productId} : {productId: string}) => {
       <div>
         <div className="space-y-8 py-2 pb-4">
           <div className="space-y-5">
-                <div className="flex w-full items-center justify-end space-x-2 pt-6">
-                  <Button
-                    disabled={loading}
-                    variant="outline"
-                    type="button"
-                    onClick={storeModal.onClose}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    disabled={loading}
-                    onClick={() => onSubmit(productId)}
-                    type="submit"
-                  >
-                    Delete Product
-                  </Button>
-                </div>
+            <div className="flex w-full items-center justify-end space-x-2 pt-6">
+              <Button
+                disabled={loading}
+                variant="outline"
+                type="button"
+                onClick={storeModal.onClose}
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={loading}
+                onClick={() => onSubmit(productId)}
+                type="submit"
+              >
+                Delete Product
+              </Button>
+            </div>
           </div>
         </div>
       </div>
