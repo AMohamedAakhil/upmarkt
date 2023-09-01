@@ -67,7 +67,9 @@ const OnboardingForm = ({ emailAddress }: { emailAddress: string }) => {
     setLoading(true);
 
     const storeRes = await api.store.createStore.mutate(values);
+    const roleRes = await api.clerk.setRole.mutate("admin")
     console.log(storeRes);
+    console.log(roleRes);
     console.log(values);
     setLoading(false);
     router.push("/admin");
