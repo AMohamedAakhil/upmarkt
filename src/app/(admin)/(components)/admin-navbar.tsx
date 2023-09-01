@@ -12,6 +12,7 @@ const AdminNavbar = () => {
     { name: "Dashboard", href: "/admin" },
     { name: "Products", href: "/admin/products" },
     { name: "Orders", href: "/admin/orders" },
+    { name: "Sellers", href: "/admin/sellers"}
   ];
 
   return (

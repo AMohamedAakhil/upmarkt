@@ -53,10 +53,8 @@ export const inviteUser = publicProcedure.input(z.string()).query(async ({ ctx, 
           return insertInviteDbRes
         } else {
           const errs = newRes.errors;
-          return {errs}
+          return errs;
         }
-
-
 });
 
 export const revokeUser = publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
