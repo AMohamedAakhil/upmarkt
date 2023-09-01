@@ -16,13 +16,16 @@ import { Input } from "@/components/ui/input";
 import { categorySchema } from "@/server/api/types";
 import { useEffect } from "react";
 import { api } from "@/trpc/client";
+import { redirect } from "next/navigation";
 
 export default function ProfileForm() {
   useEffect(() => {
     async function checkOnboarding() {
-      const store = await api.store.checkStore.query();
-      if (store) {
-        window.location.href = "/admin";
+      const check = await api.misc.checkAdmin.query();
+      if (!check.adminRole) {
+        redirect("/");
+      } else if (!check.onboarded) {
+        redirect("/admin/onboarding")
       }
     }
     checkOnboarding();

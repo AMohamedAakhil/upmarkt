@@ -109,6 +109,22 @@ export const getImage = publicProcedure
     return res;
   });
 
+export const checkAdmin = publicProcedure.query(async ({ ctx }) => {
+  const user = await currentUser();
+  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
+  console.log(emailAddress);
+  const onboarded = await ctx.prisma.store.findUnique({
+    where: {
+      email: emailAddress
+    }
+  })
+  const adminRole = user?.publicMetadata.role === "admin"
+  return {
+    onboarded: onboarded ? true : false,
+    adminRole: adminRole
+  }
+});
+
 export const miscRouter = createTRPCRouter({
   getBrands: getBrands,
   createBrand: createBrand,
@@ -116,4 +132,5 @@ export const miscRouter = createTRPCRouter({
   getAttributes: getAttributes,
   createImage: createImage,
   getImage: getImage,
+  checkAdmin: checkAdmin,
 });

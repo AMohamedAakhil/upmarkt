@@ -6,6 +6,14 @@ import { currentUser } from "@clerk/nextjs";
 export const createStore = publicProcedure
   .input(storeSchema)
   .mutation(async ({ ctx, input }) => {
+    const setInviteStatus = await ctx.prisma.invitations.update({
+      where: {
+        email: input.email,
+      },
+      data: {
+        status: {set: "accepted"},
+      }
+    })
     const res = await ctx.prisma.store.create({
       data: {
         name: input.name,

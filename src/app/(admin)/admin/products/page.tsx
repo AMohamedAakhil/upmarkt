@@ -4,10 +4,13 @@ import { redirect } from "next/navigation";
 import ProductDataTable from "./product-data-table";
 
 const Products = async () => {
-  const onboarded = await api.store.checkStore.query();
-  if (!onboarded) {
-    redirect("/admin/onboarding");
+  const check = await api.misc.checkAdmin.query();
+  if (!check.adminRole) {
+    redirect("/");
+  } else if (!check.onboarded) {
+    redirect("/admin/onboarding")
   }
+
 
   return (
     <>

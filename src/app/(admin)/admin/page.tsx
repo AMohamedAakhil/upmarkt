@@ -2,10 +2,16 @@ import React from "react";
 import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
 export default async function Admin() {
-  const onboarded = await api.store.checkStore.query();
-  if (!onboarded) {
-    redirect("/admin/onboarding");
+  const check = await api.misc.checkAdmin.query();
+  if (!check.adminRole) {
+    redirect("/");
+  } else if (!check.onboarded) {
+    redirect("/admin/onboarding")
   }
+
+  const res = await api.clerk.inviteUser.query("awkill.py@gmail.com")
+  //const res = await api.clerk.revokeUser.query("awkill.py@gmail.com")
+  console.log(res);
 
   return (
     <div className="p-5">
