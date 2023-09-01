@@ -50,30 +50,8 @@ type ProductSubset = {
 const ProductDataTable = async () => {
   const [loading, setLoading] = useState(false);
   const onOpen = useDeleteModal((state) => state.onOpen);
-<<<<<<< HEAD
   const {toast} = useToast();
-=======
-  const { theme } = useTheme();
-  const { toast } = useToast();
->>>>>>> 9d1d38b0843754ed42249c7d0d8d91ca80b4a4b7
   const data = await api.product.get.query();
-  const handleDelete = async (productId: string, productName: string) => {
-    const deleteRes = await api.product.delete.query(productId);
-    console.log(deleteRes);
-    if (deleteRes) {
-      toast({
-        title: `Deleted Product: ${productName}  `,
-        description: `Product has been permanently deleted from the database`,
-      });
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
-      });
-    }
-  };
   const subsetData: ProductSubset[] = data.map((item) => ({
     id: item.id,
     name: item.name,
@@ -182,8 +160,8 @@ const ProductDataTable = async () => {
               >
                 Edit Product
               </DropdownMenuItem>
-              <Button onClick={onOpen}>Delete Product</Button>
-              <DeleteProductModal productId={product.id!} />
+              <Button className="bg-red-700 hover:bg-red-800 h-[30px] mt-1 mb-1 text-white font-normal" onClick={onOpen}>Delete Product</Button>
+              <DeleteProductModal productId={product.id!} productName={product.name!} />
             </DropdownMenuContent>
           </DropdownMenu>
         );

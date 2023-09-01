@@ -1,16 +1,14 @@
 "use client";
 
-import * as z from "zod";
 import { useState } from "react";
 import { api } from "@/trpc/client";
-import { categorySchema } from "@/server/api/types";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useDeleteModal } from "@/hooks/use-delete-modal";
 
-export const DeleteProductModal = ({ productId }: { productId: string }) => {
+export const DeleteProductModal = ({ productId, productName }: { productId: string, productName: string }) => {
   const storeModal = useDeleteModal();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -22,7 +20,7 @@ export const DeleteProductModal = ({ productId }: { productId: string }) => {
       console.log(response);
       storeModal.onClose();
       toast({
-        title: `Deleted Product: ${values}`,
+        title: `Deleted Product: ${productName}`,
       });
     } catch (error) {
       toast({
