@@ -198,9 +198,11 @@ const ProductDataTable = async () => {
               </h1>
               <h1 className="text-md">List of products in the store</h1>
             </div>
+            <Link href="/admin/products/addproduct">
             <Button>
-              <Link href="/admin/products/addproduct">Add Product</Link>
+              Add Product
             </Button>
+              </Link>
           </div>
           <Separator className="mt-5" />
           <DataTable columns={columns} data={subsetData} filterFor="name" />
