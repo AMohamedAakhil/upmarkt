@@ -38,10 +38,10 @@ async function handler(request: Request) {
       data: {
         clerkId: id as string,
         attributes: attributes,
-        //email: attributes.emailAddresses[0].emailAddress as string,
-        role: attributes.publicMetadata.role as string,
-        firstName: attributes.first_name as string,
-        lastName: attributes.last_name as string,
+        email: attributes.data.emailAddresses[0].emailAddress as string,
+        role: attributes.data.publicMetadata.role as string,
+        firstName: attributes.data.first_name as string,
+        lastName: attributes.data.last_name as string,
       },
     });
 
