@@ -3,6 +3,7 @@ import { clerkClient, currentUser } from "@clerk/nextjs";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { prisma } from "@/server/db";
+import { TRPCClientError } from "@trpc/client";
 
 export const setRole = publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     try {
@@ -67,7 +68,7 @@ export const inviteUser = publicProcedure.input(z.string()).query(async ({ ctx, 
           }
         } else {
           const errs = newRes.errors;
-          return errs;
+          throw new TRPCClientError(errs[0].message);
         }
 });
 

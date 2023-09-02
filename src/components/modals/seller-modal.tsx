@@ -46,11 +46,11 @@ export const SellerModal = () => {
       toast({
         title: `Sent invitation to seller: ${values.email}`,
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
+        description: `${error.message}`,
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
     } finally {
