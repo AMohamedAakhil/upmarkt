@@ -123,7 +123,7 @@ export const checkAdmin = publicProcedure.query(async ({ ctx }) => {
       email: emailAddress
     }
   })
-  const isAdmin = adminRole?.role === "admin" ? true : false
+  const isAdmin = adminRole?.role === "admin" || "superadmin" ? true : false
   return {
     onboarded: onboarded ? true : false,
     adminRole: isAdmin
