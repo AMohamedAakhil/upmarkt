@@ -33,12 +33,15 @@ async function handler(request: Request) {
 
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
-    const { id, ...attributes } = evt.data;
+    const { id, first_name, last_name, emailAddresses, publicMetadata, ...attributes } = evt.data;
     const res = await prisma.user.create({
       data: {
         clerkId: id as string,
         attributes: attributes,
-        email: attributes?.emailAddresses[0]!.emailAddress!,
+        email: emailAddresses[0].emailAddress as string,
+        role: publicMetadata.role as string,
+        firstName: first_name as string,
+        lastName: last_name as string,
       },
     });
 
@@ -49,9 +52,9 @@ async function handler(request: Request) {
 }
 
 type EventType = "user.created" | "user.updated" | "*";
-
+type T = any;
 type Event = {
-  data: Record<string, string | number>;
+  data: any;
   object: "event";
   type: EventType;
 };

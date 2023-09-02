@@ -12,6 +12,10 @@ model User {
   id                 String           @id @default(cuid())
   clerkId         String           @unique
   attributes Json 
+  email String? @unique
+  role String @default("customer")
+  firstName String?
+  lastName String?
   reviews            CustomerReview[]
   orders             Order[]
   productsInWishlist Product[]        @relation("usersInWishlist")

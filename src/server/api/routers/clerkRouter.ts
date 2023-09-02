@@ -2,6 +2,7 @@ import { clerkClient, currentUser } from "@clerk/nextjs";
 
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { prisma } from "@/server/db";
 
 export const setRole = publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     const user = await currentUser()
@@ -41,7 +42,7 @@ export const inviteUser = publicProcedure.input(z.string()).query(async ({ ctx, 
           body: JSON.stringify(data)
         })
         const newRes = await res.json()
-        console.log(newRes);
+        console.log("New res ass nigga" , newRes);
         if (newRes.status === "pending") {
           const insertInviteDbRes = await ctx.prisma.invitations.create({
             data: {
@@ -51,6 +52,23 @@ export const inviteUser = publicProcedure.input(z.string()).query(async ({ ctx, 
             }
           })
           return insertInviteDbRes
+        } else if (newRes.errors[0].code === "form_identifier_exists") {
+          const userId = await ctx.prisma.user.findUnique({
+            where: {
+              email: input
+            }
+          })
+          try {
+            const res = await clerkClient.users.updateUserMetadata(userId!.id, {
+              publicMetadata: {
+                role: "admin"
+              }
+            })
+            return res
+      
+          } catch(e) {
+            return e
+          }
         } else {
           const errs = newRes.errors;
           return errs;
