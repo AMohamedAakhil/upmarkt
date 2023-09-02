@@ -38,7 +38,7 @@ async function handler(request: Request) {
       data: {
         clerkId: id as string,
         attributes: attributes,
-        email: attributes.emailAddresses[0].emailAddress as string,
+        //email: attributes.emailAddresses[0].emailAddress as string,
         role: attributes.publicMetadata.role as string,
         firstName: attributes.first_name as string,
         lastName: attributes.last_name as string,
