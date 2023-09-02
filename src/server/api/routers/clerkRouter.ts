@@ -1,8 +1,5 @@
-import { clerkClient, currentUser } from "@clerk/nextjs";
-
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { prisma } from "@/server/db";
 import { TRPCClientError } from "@trpc/client";
 
 export const setRole = publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {

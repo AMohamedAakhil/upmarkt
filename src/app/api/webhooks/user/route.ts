@@ -38,18 +38,38 @@ async function handler(request: Request) {
     const lastName = evt.data.last_name
     const email = evt.data.email_addresses[0].email_address;
     const role = evt.data.public_metadata.role ? evt.data.public_metadata.role : "customer";
-    const res = await prisma.user.create({
-      data: {
-        clerkId: id as string,
-        attributes: attributes,
+    const checkInvitations = await prisma.invitations.findUnique({
+      where: {
         email: email,
-        role: role,
-        firstName: firstName,
-        lastName: lastName,
-      },
-    });
+      }
+    })
+    if (checkInvitations) {
+      const res = await prisma.user.create({
+        data: {
+          clerkId: id as string,
+          attributes: attributes,
+          email: email,
+          role: "admin",
+          firstName: firstName,
+          lastName: lastName,
+        },
+      });  
+      console.log(res);
 
-    console.log(res);
+    } else {
+      const res = await prisma.user.create({
+        data: {
+          clerkId: id as string,
+          attributes: attributes,
+          email: email,
+          role: role,
+          firstName: firstName,
+          lastName: lastName,
+        },
+      });
+      console.log(res);
+
+    }
   }
 
   return NextResponse.json({}, { status: 200 });
