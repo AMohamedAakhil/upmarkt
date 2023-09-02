@@ -1,8 +1,11 @@
 import React from 'react'
+import SellerClient from './(client)/SellerClient'
 
 const Sellers = () => {
   return (
-    <div>Sellers</div>
+    <>
+      <SellerClient />
+    </>
   )
 }
 

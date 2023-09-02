@@ -118,10 +118,15 @@ export const checkAdmin = publicProcedure.query(async ({ ctx }) => {
       email: emailAddress
     }
   })
-  const adminRole = user?.publicMetadata.role === "admin"
+  const adminRole = await ctx.prisma.user.findUnique({
+    where: {
+      email: emailAddress
+    }
+  })
+  const isAdmin = adminRole?.role === "admin" ? true : false
   return {
     onboarded: onboarded ? true : false,
-    adminRole: adminRole
+    adminRole: isAdmin
   }
 });
 

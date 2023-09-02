@@ -9,9 +9,9 @@ export default async function Admin() {
     redirect("/admin/onboarding")
   }
 
-  const res = await api.clerk.inviteUser.query("awkill.py@gmail.com")
+  //const res = await api.clerk.inviteUser.query("awkill.py@gmail.com")
   //const res = await api.clerk.revokeUser.query("awkill.py@gmail.com")
-  console.log(res);
+  //console.log(res);
 
   return (
     <div className="p-5">
