@@ -10,31 +10,14 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-
-import { useTheme } from "next-themes";
-
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDeleteModal } from "@/hooks/use-delete-modal";
-import { toast } from "react-hot-toast";
 import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import { DeleteProductModal } from "@/components/modals/delete-product-modal";
 
 type ProductSubset = {
@@ -48,9 +31,7 @@ type ProductSubset = {
 };
 
 const ProductDataTable = async () => {
-  const [loading, setLoading] = useState(false);
   const onOpen = useDeleteModal((state) => state.onOpen);
-  const {toast} = useToast();
   const data = await api.product.get.query();
   const subsetData: ProductSubset[] = data.map((item) => ({
     id: item.id,
