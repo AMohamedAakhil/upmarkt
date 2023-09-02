@@ -34,14 +34,17 @@ async function handler(request: Request) {
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, ...attributes } = evt.data;
+    const firstName = evt.data.first_name
+    const lastName = evt.data.last_name
+    const emails = evt.data.email_addresses;
     const res = await prisma.user.create({
       data: {
         clerkId: id as string,
         attributes: attributes,
-        email: attributes.data.emailAddresses[0].emailAddress as string,
-        role: attributes.data.publicMetadata.role as string,
-        firstName: attributes.data.first_name as string,
-        lastName: attributes.data.last_name as string,
+        //email: emails.emailAddresses[0].emailAddress as string,
+        //role: attributes.data.publicMetadata.role as string,
+        firstName: firstName,
+        lastName: lastName,
       },
     });
 
