@@ -36,13 +36,14 @@ async function handler(request: Request) {
     const { id, ...attributes } = evt.data;
     const firstName = evt.data.first_name
     const lastName = evt.data.last_name
-    const emails = evt.data.email_addresses;
+    const email = evt.data.email_addresses;
+    const role = evt.data.public_metadata.role;
     const res = await prisma.user.create({
       data: {
         clerkId: id as string,
         attributes: attributes,
-        //email: emails.emailAddresses[0].emailAddress as string,
-        //role: attributes.data.publicMetadata.role as string,
+        email: email,
+        role: role,
         firstName: firstName,
         lastName: lastName,
       },
