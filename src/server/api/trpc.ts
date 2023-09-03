@@ -8,7 +8,7 @@
  */
 
 import { experimental_createServerActionHandler } from "@trpc/next/app-dir/server";
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import { type FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { headers } from "next/headers";
 import superjson from "superjson";
@@ -38,10 +38,12 @@ type CreateContextOptions = {
  *
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
-export const createInnerTRPCContext = (opts: CreateContextOptions) => {
+export const createInnerTRPCContext = async (opts: CreateContextOptions) => {
+  const user = await currentUser();
   return {
     headers: opts.headers,
     prisma,
+    user,
   };
 };
 
@@ -108,6 +110,22 @@ export const createAction = experimental_createServerActionHandler(t, {
  */
 export const createTRPCRouter = t.router;
 
+const isAuthed = t.middleware(async ({ next, ctx }) => {
+  const user = await ctx.prisma.user.findUnique({
+    where: {
+      email: ctx.user!.emailAddresses[0]!.emailAddress,
+    }
+  })
+  if (user!.role === "customer") {
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
+  }
+  return next({
+    ctx: {
+      user: ctx.user,
+    },
+  })
+})
+
 /**
  * Public (unauthenticated) procedure
  *
@@ -116,3 +134,4 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+export const protectedProcedure = t.procedure.use(isAuthed);
