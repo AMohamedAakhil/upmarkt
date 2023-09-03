@@ -11,7 +11,6 @@ const Products = async () => {
     redirect("/admin/onboarding")
   }
 
-
   return (
     <>
       <ProductDataTable />

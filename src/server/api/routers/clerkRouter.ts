@@ -63,6 +63,17 @@ export const inviteUser = publicProcedure.input(z.string()).query(async ({ ctx, 
           } catch(e) {
             return e
           }
+        } else if (newRes.errors[0].code === "duplicate_record") {
+          const setRole = await ctx.prisma.user.update({
+            where: {
+              email: input,
+            },
+            data: {
+              role: "admin"
+            }
+          })
+          //throw new TRPCClientError(errs[0].message);
+          return setRole
         } else {
           const errs = newRes.errors;
           throw new TRPCClientError(errs[0].message);

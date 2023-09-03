@@ -8,7 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useDeleteModal } from "@/hooks/use-delete-modal";
 
-export const DeleteSellerModal = ({ productId, productName }: { productId: string, productName: string }) => {
+export const DeleteSellerModal = ({ sellerEmail }: { sellerEmail: string }) => {
   const storeModal = useDeleteModal();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -16,11 +16,11 @@ export const DeleteSellerModal = ({ productId, productName }: { productId: strin
   const onSubmit = async (values: string) => {
     try {
       setLoading(true);
-      const response = await api.product.delete.query(values);
+      const response = await api.seller.deleteSeller.query(sellerEmail);
       console.log(response);
       storeModal.onClose();
       toast({
-        title: `Deleted Product: ${productName}`,
+        title: `Removed seller with email: ${sellerEmail}`,
       });
     } catch (error) {
       toast({
@@ -36,8 +36,8 @@ export const DeleteSellerModal = ({ productId, productName }: { productId: strin
 
   return (
     <Modal
-      title="Delete Product"
-      description="This action will permanently delete the product."
+      title="Delete Seller"
+      description="This action will permanently delete the seller and their store."
       isOpen={storeModal.isOpen}
       onClose={storeModal.onClose}
     >
@@ -55,10 +55,10 @@ export const DeleteSellerModal = ({ productId, productName }: { productId: strin
               </Button>
               <Button
                 disabled={loading}
-                onClick={() => onSubmit(productId)}
+                onClick={() => onSubmit(sellerEmail)}
                 type="submit"
               >
-                Delete Product
+                Delete Seller
               </Button>
             </div>
           </div>

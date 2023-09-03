@@ -9,7 +9,6 @@ import React from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -17,12 +16,9 @@ import {
 import { api } from "@/trpc/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useDeleteModal } from "@/hooks/use-delete-modal";
-import { useToast } from "@/components/ui/use-toast";
-import { DeleteProductModal } from "@/components/modals/delete-product-modal";
 import type { User } from '@prisma/client'
+import { DeleteSellerModal } from '@/components/modals/delete-seller-modal'
 
 const SellerClient = ({data} : {data: User[]}) => {
   type SellerData = {
@@ -37,6 +33,8 @@ const SellerClient = ({data} : {data: User[]}) => {
     email: item.email,
     role: item.role,
   }));
+
+  const onDeleteSellerOpen = useDeleteModal((state) => state.onOpen);
 
   const columns: ColumnDef<SellerData>[] = [
     {
@@ -95,7 +93,8 @@ const SellerClient = ({data} : {data: User[]}) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <Button className="bg-red-700 hover:bg-red-800 h-[30px] mt-1 mb-1 text-white font-normal" onClick={onOpen}>Delete Product</Button>
+              <DeleteSellerModal sellerEmail={user.email!} />
+              <Button className="bg-red-700 hover:bg-red-800 h-[30px] mt-1 mb-1 text-white font-normal" onClick={onDeleteSellerOpen}>Delete Seller</Button>
             </DropdownMenuContent>
           </DropdownMenu>
         );

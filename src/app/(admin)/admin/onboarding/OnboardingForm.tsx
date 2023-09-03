@@ -30,16 +30,17 @@ import { useTheme } from "next-themes";
 import "primereact/resources/primereact.min.css";
 import { storeSchema } from "@/server/api/types";
 import { api } from "@/trpc/client";
-import { currentUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
-const OnboardingForm = ({ emailAddress }: { emailAddress: string }) => {
+const OnboardingForm = async ({ emailAddress }: { emailAddress: string }) => {
   useEffect(() => {
     async function checkOnboarding() {
-      const store = await api.store.checkStore.query();
-      if (store) {
-        window.location.href = "/admin";
-      }
+      const check = await api.misc.checkAdmin.query();
+      if (!check.adminRole) {
+        window.location.assign("/")
+      } else if (!!check.onboarded) {
+        window.location.assign("/admin")
+      } 
     }
     checkOnboarding();
   }, []);
