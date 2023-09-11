@@ -1,10 +1,8 @@
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
-import AdminNavbar from "../(components)/admin-navbar";
-import { ModalProvider } from "@/providers/modal-provider";
-import { api } from "@/trpc/server";
-import { redirect } from "next/navigation";
+import AdminNavbar from "./(components)/admin-navbar";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,6 +29,7 @@ export default async function RootLayout({
     >
       <AdminNavbar />
       {children}
+      <Toaster />
     </section>
   );
 }

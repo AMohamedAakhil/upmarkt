@@ -1,15 +1,12 @@
 import "@/styles/globals.css";
-import { Inter, Questrial } from "next/font/google";
+import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
-import { ClerkProvider } from "@clerk/nextjs";
-import { ThemeProvider } from "@/providers/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
-
+import { Questrial } from "next/font/google";
+import Navbar from "@/components/main-store-components/navbar";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
 const questrial = Questrial({
   weight: '400',
   subsets: ['latin'],
@@ -28,18 +25,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <ClerkProvider>
         <body
           className={twMerge(
             "bg-background font-sans text-foreground",
             questrial.className
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {children}
-          </ThemeProvider>
         </body>
-      </ClerkProvider>
     </html>
   );
 }

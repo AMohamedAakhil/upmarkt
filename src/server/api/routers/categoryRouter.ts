@@ -63,15 +63,7 @@ export const createSubSubCategory = publicProcedure
   });
 
 export const getCategories = publicProcedure.query(async ({ ctx }) => {
-  const user = await currentUser();
-  const emailAddress = user?.emailAddresses[0]!.emailAddress!;
-  return ctx.prisma.storeCategory.findMany({
-    where: {
-      store: {
-        email: emailAddress,
-      },
-    },
-  });
+  return ctx.prisma.storeCategory.findMany();
 });
 
 export const getLastCategory = publicProcedure.query(async ({ ctx }) => {
@@ -97,6 +89,11 @@ export const getSubSubCategories = publicProcedure.query(async ({ ctx }) => {
   return ctx.prisma.storeSubSubCategory.findMany({});
 });
 
+export const getAllSubCategories = publicProcedure
+  .query(async ({ ctx }) => {
+    return ctx.prisma.storeSubCategory.findMany({});
+  });
+
 export const categoryRouter = createTRPCRouter({
   createCategory: createCategory,
   createSubCategory: createSubCategory,
@@ -104,5 +101,6 @@ export const categoryRouter = createTRPCRouter({
   getCategories: getCategories,
   getLastCategory: getLastCategory,
   getSubCategories: getSubCategories,
+  getAllSubCategories: getAllSubCategories,
   getSubSubCategories: getSubSubCategories,
 });
