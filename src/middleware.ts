@@ -7,7 +7,7 @@ import { prisma } from "./server/db";
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your middleware
 export default authMiddleware({
   publicRoutes: ["/api/webhooks/user", "/"],
-  ignoredRoutes: ["/((?!api|trpc))(_next|.+\..+)(.*)", "/api/trpc/category.getCategories"]
+  ignoredRoutes: ["/((?!api|trpc))(_next|.+\..+)(.*)", "/api/trpc"]
 });
 
 export const config = {
