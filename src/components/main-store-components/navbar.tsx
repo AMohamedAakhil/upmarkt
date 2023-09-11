@@ -58,13 +58,13 @@ const Navbar = ({categories, subcategories} : {categories: StoreCategory[], subc
           <User2 strokeWidth={1} />
         </div>
       </div>
-      <div onMouseLeave={() => {setHover(false)}} className={!hover ? "opacity-0 transition-opacity duration-500 ease-in-out" : 'opacity-100 duration-500 transition-opacity ease-in-out peer-hover:block h-[30rem] bg-slate-50 hover:block hidden'}>
+      <div onMouseLeave={() => {setHover(false)}} className={!hover ? "opacity-0 transition-opacity duration-500 ease-in-out" : 'opacity-100 duration-500 transition-opacity ease-in-out peer-hover:block h-[30rem] bg-white drop-shadow-2xl hover:block hidden'}>
       <div
       className="flex justify-between items-start"
     >
       <div className="flex items-center space-x-1">
 
-                <div className="flex flex-col px-32 py-10">
+                <div className="flex flex-col px-44 py-10">
                 <h1 className="text-4xl text-black mb-5">{selectedCategoryName}</h1>
 
                 {filteredSubcategories
@@ -73,7 +73,7 @@ const Navbar = ({categories, subcategories} : {categories: StoreCategory[], subc
             ))}
           </div>
       </div>
-      <div className="flex px-32 py-10">
+      <div className="flex px-44 py-10">
         {
           clonedData[0] ? <Image className="hover:drop-shadow-xl mx-4" alt="categoryImage" src={clonedData[0]?.imageUrl} width={400} height={400} /> : <></>
         }
