@@ -8,7 +8,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useDeleteModal } from "@/hooks/use-delete-modal";
 
-export const DeleteProductModal = ({ productId, productName }: { productId: string, productName: string }) => {
+export const DeleteProductModal = ({
+  productId,
+  productName,
+}: {
+  productId: string;
+  productName: string;
+}) => {
   const storeModal = useDeleteModal();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);

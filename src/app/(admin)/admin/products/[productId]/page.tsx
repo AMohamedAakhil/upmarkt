@@ -8,7 +8,7 @@ const EditProduct = async ({ params }: { params: { productId: string } }) => {
   if (!check.adminRole) {
     redirect("/");
   } else if (!check.onboarded) {
-    redirect("/admin/onboarding")
+    redirect("/admin/onboarding");
   }
 
   const { productId } = params;

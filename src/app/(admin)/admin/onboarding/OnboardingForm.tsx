@@ -37,10 +37,10 @@ const OnboardingForm = async ({ emailAddress }: { emailAddress: string }) => {
     async function checkOnboarding() {
       const check = await api.misc.checkAdmin.query();
       if (!check.adminRole) {
-        window.location.assign("/")
+        window.location.assign("/");
       } else if (!!check.onboarded) {
-        window.location.assign("/admin")
-      } 
+        window.location.assign("/admin");
+      }
     }
     checkOnboarding();
   }, []);
@@ -68,7 +68,7 @@ const OnboardingForm = async ({ emailAddress }: { emailAddress: string }) => {
     setLoading(true);
 
     const storeRes = await api.store.createStore.mutate(values);
-    const roleRes = await api.clerk.setRole.mutate("admin")
+    const roleRes = await api.clerk.setRole.mutate("admin");
     console.log(storeRes);
     console.log(roleRes);
     console.log(values);

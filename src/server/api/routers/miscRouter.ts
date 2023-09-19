@@ -115,19 +115,19 @@ export const checkAdmin = publicProcedure.query(async ({ ctx }) => {
   console.log(emailAddress);
   const onboarded = await ctx.prisma.store.findUnique({
     where: {
-      email: emailAddress
-    }
-  })
+      email: emailAddress,
+    },
+  });
   const adminRole = await ctx.prisma.user.findUnique({
     where: {
-      email: emailAddress
-    }
-  })
-  const isAdmin = adminRole?.role === "admin" || "superadmin" ? true : false
+      email: emailAddress,
+    },
+  });
+  const isAdmin = adminRole?.role === "admin" || "superadmin" ? true : false;
   return {
     onboarded: onboarded ? true : false,
-    adminRole: isAdmin
-  }
+    adminRole: isAdmin,
+  };
 });
 
 export const miscRouter = createTRPCRouter({

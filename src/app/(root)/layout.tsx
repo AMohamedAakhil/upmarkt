@@ -8,9 +8,9 @@ const inter = Inter({
   variable: "--font-sans",
 });
 const questrial = Questrial({
-  weight: '400',
-  subsets: ['latin'],
-})
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "Create T3 App",
@@ -25,14 +25,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-        <body
-          className={twMerge(
-            "bg-background font-sans text-foreground",
-            questrial.className
-          )}
-        >
-            {children}
-        </body>
+      <body
+        className={twMerge(
+          "bg-background font-sans text-foreground",
+          questrial.className
+        )}
+      >
+        {children}
+      </body>
     </html>
   );
 }

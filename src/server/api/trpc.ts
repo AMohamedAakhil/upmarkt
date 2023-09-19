@@ -114,17 +114,17 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
   const user = await ctx.prisma.user.findUnique({
     where: {
       email: ctx.user!.emailAddresses[0]!.emailAddress,
-    }
-  })
+    },
+  });
   if (user!.role === "customer") {
-    throw new TRPCError({ code: 'UNAUTHORIZED' })
+    throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({
     ctx: {
       user: ctx.user,
     },
-  })
-})
+  });
+});
 
 /**
  * Public (unauthenticated) procedure

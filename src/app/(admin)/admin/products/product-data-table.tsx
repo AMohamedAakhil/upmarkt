@@ -141,8 +141,16 @@ const ProductDataTable = async () => {
               >
                 Edit Product
               </DropdownMenuItem>
-              <Button className="bg-red-700 hover:bg-red-800 h-[30px] mt-1 mb-1 text-white font-normal" onClick={onOpen}>Delete Product</Button>
-              <DeleteProductModal productId={product.id!} productName={product.name!} />
+              <Button
+                className="mb-1 mt-1 h-[30px] bg-red-700 font-normal text-white hover:bg-red-800"
+                onClick={onOpen}
+              >
+                Delete Product
+              </Button>
+              <DeleteProductModal
+                productId={product.id!}
+                productName={product.name!}
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -162,10 +170,8 @@ const ProductDataTable = async () => {
               <h1 className="text-md">List of products in the store</h1>
             </div>
             <Link href="/admin/products/addproduct">
-            <Button>
-              Add Product
-            </Button>
-              </Link>
+              <Button>Add Product</Button>
+            </Link>
           </div>
           <Separator className="mt-5" />
           <DataTable columns={columns} data={subsetData} filterFor="name" />

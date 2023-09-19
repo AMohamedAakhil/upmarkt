@@ -25,7 +25,7 @@ export default function ProfileForm() {
       if (!check.adminRole) {
         redirect("/");
       } else if (!check.onboarded) {
-        redirect("/admin/onboarding")
+        redirect("/admin/onboarding");
       }
     }
     checkOnboarding();

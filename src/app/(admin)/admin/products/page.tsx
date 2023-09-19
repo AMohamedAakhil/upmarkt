@@ -8,7 +8,7 @@ const Products = async () => {
   if (!check.adminRole) {
     redirect("/");
   } else if (!check.onboarded) {
-    redirect("/admin/onboarding")
+    redirect("/admin/onboarding");
   }
 
   return (

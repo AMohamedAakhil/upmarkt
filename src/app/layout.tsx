@@ -11,9 +11,9 @@ const inter = Inter({
 });
 
 const questrial = Questrial({
-  weight: '400',
-  subsets: ['latin'],
-})
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "Create T3 App",

@@ -12,14 +12,13 @@ export const createStore = publicProcedure
           email: input.email,
         },
         data: {
-          status: {set: "accepted"},
-        }
-      })
-
+          status: { set: "accepted" },
+        },
+      });
     } catch (e) {
       console.log(e);
     }
- 
+
     const res = await ctx.prisma.store.create({
       data: {
         name: input.name,

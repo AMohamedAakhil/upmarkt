@@ -12,7 +12,7 @@ const AdminNavbar = () => {
     { name: "Dashboard", href: "/admin" },
     { name: "Products", href: "/admin/products" },
     { name: "Orders", href: "/admin/orders" },
-    { name: "Sellers", href: "/admin/sellers"}
+    { name: "Sellers", href: "/admin/sellers" },
   ];
 
   return (
@@ -26,7 +26,8 @@ const AdminNavbar = () => {
               <Link
                 className={
                   isActive
-                    ? "text-black dark:text-white" : "text-slate-500 hover:text-slate-700 hover:dark:text-slate-300"
+                    ? "text-black dark:text-white"
+                    : "text-slate-500 hover:text-slate-700 hover:dark:text-slate-300"
                 }
                 href={link.href}
                 key={link.name}

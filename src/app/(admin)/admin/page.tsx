@@ -6,11 +6,11 @@ export default async function Admin() {
   if (!check.adminRole) {
     redirect("/");
   } else if (!check.onboarded) {
-    redirect("/admin/onboarding")
+    redirect("/admin/onboarding");
   }
 
   //const res = await api.clerk.inviteUser.query("awkill.py@gmail.com")
-  const res = await api.clerk.revokeUser.query("txrquoise.py@gmail.com ")
+  const res = await api.clerk.revokeUser.query("txrquoise.py@gmail.com ");
   console.log(res);
 
   return (

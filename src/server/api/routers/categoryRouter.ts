@@ -89,10 +89,9 @@ export const getSubSubCategories = publicProcedure.query(async ({ ctx }) => {
   return ctx.prisma.storeSubSubCategory.findMany({});
 });
 
-export const getAllSubCategories = publicProcedure
-  .query(async ({ ctx }) => {
-    return ctx.prisma.storeSubCategory.findMany({});
-  });
+export const getAllSubCategories = publicProcedure.query(async ({ ctx }) => {
+  return ctx.prisma.storeSubCategory.findMany({});
+});
 
 export const categoryRouter = createTRPCRouter({
   createCategory: createCategory,

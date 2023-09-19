@@ -34,15 +34,17 @@ async function handler(request: Request) {
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, ...attributes } = evt.data;
-    const firstName = evt.data.first_name
-    const lastName = evt.data.last_name
+    const firstName = evt.data.first_name;
+    const lastName = evt.data.last_name;
     const email = evt.data.email_addresses[0].email_address;
-    const role = evt.data.public_metadata.role ? evt.data.public_metadata.role : "customer";
+    const role = evt.data.public_metadata.role
+      ? evt.data.public_metadata.role
+      : "customer";
     const checkInvitations = await prisma.invitations.findUnique({
       where: {
         email: email,
-      }
-    })
+      },
+    });
     if (checkInvitations) {
       const res = await prisma.user.create({
         data: {
@@ -53,9 +55,8 @@ async function handler(request: Request) {
           firstName: firstName,
           lastName: lastName,
         },
-      });  
+      });
       console.log(res);
-
     } else {
       const res = await prisma.user.create({
         data: {
@@ -68,7 +69,6 @@ async function handler(request: Request) {
         },
       });
       console.log(res);
-
     }
   }
 

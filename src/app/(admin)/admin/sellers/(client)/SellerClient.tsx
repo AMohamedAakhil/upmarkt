@@ -1,10 +1,10 @@
-"use client"
-import { Button } from '@/components/ui/button'
-import { DataTable } from '@/components/ui/data-table'
-import { Separator } from '@/components/ui/separator'
-import { useSellerModal } from '@/hooks/use-seller-modal'
-import { SellerModalProvider } from '@/providers/seller-modal-provider'
-import React from 'react'
+"use client";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { Separator } from "@/components/ui/separator";
+import { useSellerModal } from "@/hooks/use-seller-modal";
+import { SellerModalProvider } from "@/providers/seller-modal-provider";
+import React from "react";
 
 import {
   DropdownMenu,
@@ -17,10 +17,10 @@ import { api } from "@/trpc/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useDeleteModal } from "@/hooks/use-delete-modal";
-import type { User } from '@prisma/client'
-import { DeleteSellerModal } from '@/components/modals/delete-seller-modal'
+import type { User } from "@prisma/client";
+import { DeleteSellerModal } from "@/components/modals/delete-seller-modal";
 
-const SellerClient = ({data} : {data: User[]}) => {
+const SellerClient = ({ data }: { data: User[] }) => {
   type SellerData = {
     id: string | null;
     name: string | undefined | null;
@@ -94,7 +94,12 @@ const SellerClient = ({data} : {data: User[]}) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DeleteSellerModal sellerEmail={user.email!} />
-              <Button className="bg-red-700 hover:bg-red-800 h-[30px] mt-1 mb-1 text-white font-normal" onClick={onDeleteSellerOpen}>Delete Seller</Button>
+              <Button
+                className="mb-1 mt-1 h-[30px] bg-red-700 font-normal text-white hover:bg-red-800"
+                onClick={onDeleteSellerOpen}
+              >
+                Delete Seller
+              </Button>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -102,27 +107,23 @@ const SellerClient = ({data} : {data: User[]}) => {
     },
   ];
 
-  const onOpen = useSellerModal((state) => state.onOpen)
+  const onOpen = useSellerModal((state) => state.onOpen);
   return (
     <>
       <SellerModalProvider />
       <div className="p-5">
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col">
-              <h1 className="text-3xl font-bold">
-                Sellers
-              </h1>
-              <h1 className="text-md">List of sellers on the store</h1>
-            </div>
-            <Button onClick={onOpen}>
-              Add Seller
-            </Button>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <h1 className="text-3xl font-bold">Sellers</h1>
+            <h1 className="text-md">List of sellers on the store</h1>
           </div>
-          <Separator className="mt-5" />
-          <DataTable columns={columns} data={subsetData} filterFor="name" />
-          </div>
+          <Button onClick={onOpen}>Add Seller</Button>
+        </div>
+        <Separator className="mt-5" />
+        <DataTable columns={columns} data={subsetData} filterFor="name" />
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default SellerClient
+export default SellerClient;
