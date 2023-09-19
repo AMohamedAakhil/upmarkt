@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { ChevronDown, Heart, Search, ShoppingBag, User2 } from "lucide-react";
 import { Questrial } from "next/font/google";
 import Link from "next/link";
@@ -34,6 +35,7 @@ const Navbar = ({
   clonedData.sort((a, b) => a.priorityNumber - b.priorityNumber);
   console.log("cloned data", clonedData);
   //const topTwoImageUrls = clonedData.slice(0, 2).map(item => item.imageUrl);
+  const [menuDropdownRef] = useAutoAnimate();
 
   return (
 <div className="w-full">
@@ -108,6 +110,7 @@ const Navbar = ({
 
               {filteredSubcategories.map((subcategory: StoreSubCategory) => (
                 <Link
+                ref={menuDropdownRef}
                   href={`/${subcategory.name}`}
                   className={
                     "text-lg uppercase tracking-widest text-black hover:underline "

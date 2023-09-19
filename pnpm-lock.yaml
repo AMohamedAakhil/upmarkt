@@ -8,6 +8,9 @@ dependencies:
   '@clerk/nextjs':
     specifier: ^4.23.2
     version: 4.23.5(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
+  '@formkit/auto-animate':
+    specifier: ^0.8.0
+    version: 0.8.0
   '@hookform/resolvers':
     specifier: ^3.3.0
     version: 3.3.1(react-hook-form@7.46.1)
@@ -350,6 +353,10 @@ packages:
 
   /@floating-ui/utils@0.1.4:
     resolution: {integrity: sha512-qprfWkn82Iw821mcKofJ5Pk9wgioHicxcQMxx+5zt5GSKoqdWvgG5AxVmpmUUjzTLPVSH5auBrhI93Deayn/DA==}
+    dev: false
+
+  /@formkit/auto-animate@0.8.0:
+    resolution: {integrity: sha512-G8f7489ka0mWyi+1IEZT+xgIwcpWtRMmE2x+IrVoQ+KM1cP6VDj/TbujZjwxdb0P8w8b16/qBfViRmydbYHwMw==}
     dev: false
 
   /@hookform/resolvers@3.3.1(react-hook-form@7.46.1):
