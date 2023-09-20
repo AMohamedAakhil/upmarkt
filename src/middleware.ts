@@ -7,6 +7,7 @@ export default authMiddleware({
   publicRoutes: [
     "/api/webhooks/user",
     "/",
+    "/test",
     "/api/trpc(.*)"
   ],
 });

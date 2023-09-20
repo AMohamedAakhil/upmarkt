@@ -1,4 +1,3 @@
-import { MainCarousel } from "@/components/main-store-components/carousel";
 import Navbar from "@/components/main-store-components/navbar";
 import { api } from "@/trpc/server";
 
@@ -9,7 +8,6 @@ export default async function Home() {
     <main className="">
       <Navbar categories={categories} subcategories={subcategories} />
       <div className="w-full relative z-0">
-      <MainCarousel />
       </div>
     </main>
   );
