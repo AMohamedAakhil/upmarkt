@@ -2,12 +2,22 @@
 
 import React, { useState } from "react";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { ChevronDown, Heart, Search, ShoppingBag, User2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Heart, Navigation, Search, ShoppingBag, User2 } from "lucide-react";
 import { Questrial } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
 import { StoreCategory } from "@prisma/client";
 import { StoreSubCategory } from "@prisma/client";
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
 
 const questrial = Questrial({
   weight: ["400"],
@@ -76,10 +86,10 @@ const Navbar = ({
                 }}
                 className="flex items-center space-x-1"
               >
-                <h1 className="text-sm uppercase tracking-widest hover:underline">
+                <h1 className="peer text-sm uppercase tracking-widest hover:underline">
                   {category.name}
                 </h1>
-                <ChevronDown className="h-4 w-4" strokeWidth={1} />
+                <ChevronUp className={"h-4 w-4 peer-hover:rotate-180 transition-all duration-100 transform"} strokeWidth={1} />
               </div>
             );
           })}
@@ -95,13 +105,13 @@ const Navbar = ({
         onMouseLeave={() => {
           setHover(false);
         }}
-        className={
+        className={ 
           !hover
-            ? "hidden"
-            : "absolute z-10 w-full h-[30rem] bg-white hover:block peer-hover:block"
+          ? "h-0 opacity-0 overflow-hidden shadow-bottom shadow-2xl"
+          : "absolute z-10 w-full h-[30rem] transition-all duration-500 ease-in-out bg-white opacity-100 overflow-y-auto shadow-bottom shadow-2xl"
         }
       >
-        <div className="flex items-start justify-between">
+        <div className={!hover ? "hidden" : "flex items-start justify-between"}>
           <div className="flex items-center space-x-1">
             <div className="flex flex-col px-44 py-10">
               <h1 className="mb-5 text-4xl text-black">
