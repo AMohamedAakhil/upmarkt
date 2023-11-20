@@ -4,7 +4,7 @@ import "./src/env.mjs";
 const config = {
   experimental: { serverActions: true },
   images: {
-    domains: ["res.cloudinary.com", "via.placeholder.com"],
+    domains: ["res.cloudinary.com", "via.placeholder.com", "upmarkt.in", "placehold.co"],
   },
 };
 export default config;

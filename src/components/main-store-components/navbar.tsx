@@ -2,12 +2,22 @@
 
 import React, { useState } from "react";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { ChevronUp, Heart, Search, ShoppingBag, User2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Heart, Navigation, Search, ShoppingBag, User2 } from "lucide-react";
 import { Questrial } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
 import { StoreCategory } from "@prisma/client";
 import { StoreSubCategory } from "@prisma/client";
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
 
 const questrial = Questrial({
   weight: ["400"],
