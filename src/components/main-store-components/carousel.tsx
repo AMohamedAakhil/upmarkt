@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 import { AutoPlay } from "@egjs/flicking-plugins";
 
 
-const Carousel =  () => {
+export const Carousel =  () => {
     const [panels, setPanels] = useState([0, 1, 2, 3, 4]);
     const plugins = [new AutoPlay({ duration: 2000, direction: "NEXT", stopOnHover: true })];
 
@@ -30,5 +30,3 @@ const Carousel =  () => {
     )
 
 }
-
-export default dynamic(() => Promise.resolve(Carousel), {ssr:false});

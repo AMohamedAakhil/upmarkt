@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
 import Navbar from "@/components/main-store-components/navbar";
-import Carousel from "@/components/main-store-components/carousel";
+import {Carousel} from "@/components/main-store-components/carousel";
 
 
 export default async function Home() {
