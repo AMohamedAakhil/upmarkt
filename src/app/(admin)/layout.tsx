@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import AdminNavbar from "./(components)/admin-navbar";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,13 +24,15 @@ export default async function RootLayout({
   return (
     <section
       className={twMerge(
-        "bg-background font-sans text-foreground",
+        "font-sans text-foreground",
         inter.variable
       )}
     >
+      <ThemeProvider attribute="class" defaultTheme="dark">
       <AdminNavbar />
       {children}
       <Toaster />
+      </ThemeProvider>
     </section>
   );
 }

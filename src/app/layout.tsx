@@ -3,7 +3,6 @@ import { Inter, Questrial } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/providers/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,13 +30,11 @@ export default function RootLayout({
       <ClerkProvider>
         <body
           className={twMerge(
-            "bg-background font-sans text-foreground",
+            "bg-white dark:bg-black font-sans text-foreground",
             questrial.className
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {children}
-          </ThemeProvider>
         </body>
       </ClerkProvider>
     </html>

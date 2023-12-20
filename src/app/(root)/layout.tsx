@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import { Questrial } from "next/font/google";
 import Navbar from "@/components/main-store-components/navbar";
+import { ThemeProvider } from "@/providers/theme-provider";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -27,11 +28,13 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={twMerge(
-          "bg-background font-sans text-foreground",
+          "font-sans text-foreground",
           questrial.className
         )}
       >
+        <ThemeProvider attribute="class" defaultTheme="light">
         {children}
+        </ThemeProvider>
       </body>
     </html>
   );
