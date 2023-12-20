@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.2",
+    "@egjs/flicking-plugins": "^4.7.1",
+    "@egjs/react-flicking": "^4.11.2",
     "@formkit/auto-animate": "^0.8.0",
     "@hookform/resolvers": "^3.3.0",
     "@material-tailwind/react": "^2.1.2",
@@ -39,6 +41,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "egjs": "^2.2.0",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.268.0",
     "next": "^13.5.1",

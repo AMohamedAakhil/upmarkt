@@ -1,9 +1,19 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@clerk/nextjs':
     specifier: ^4.23.2
     version: 4.23.5(next@13.5.1)(react-dom@18.2.0)(react@18.2.0)
+  '@egjs/flicking-plugins':
+    specifier: ^4.7.1
+    version: 4.7.1(@egjs/flicking@4.11.2)
+  '@egjs/react-flicking':
+    specifier: ^4.11.2
+    version: 4.11.2
   '@formkit/auto-animate':
     specifier: ^0.8.0
     version: 0.8.0
@@ -88,6 +98,9 @@ dependencies:
   cmdk:
     specifier: ^0.2.0
     version: 0.2.0(@types/react@18.2.22)(react-dom@18.2.0)(react@18.2.0)
+  egjs:
+    specifier: ^2.2.0
+    version: 2.2.0
   framer-motion:
     specifier: ^10.16.4
     version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
@@ -194,6 +207,24 @@ packages:
       regenerator-runtime: 0.14.0
     dev: false
 
+  /@cfcs/core@0.0.24:
+    resolution: {integrity: sha512-feB38qu+eDk0Pggh/yR7gjaNmvUYA2uCxHP3Pz2MLE4LZ/9jPdtu8bzCSI47yTEhWyZCF5Pk698hdz8IN2mTjA==}
+    dependencies:
+      '@egjs/component': 3.0.5
+    dev: false
+
+  /@cfcs/core@0.0.5:
+    resolution: {integrity: sha512-TZ/RXKV7MUrqFpiX+16uaaptv5jgChWNsuE6w8Rn3eJbO1PFd4Wpn25zeJbii7ch46ck8/ZIIYCcW3pHiYtm4Q==}
+    dependencies:
+      '@egjs/component': 3.0.5
+    dev: false
+
+  /@cfcs/core@0.1.0:
+    resolution: {integrity: sha512-kvYX0RpL45XTHJ5sW7teNbKeAa7pK3nNqaJPoFfZDPTIBJOkTtRD3QhkBG+O3Hu69a8xeMoPvF6y/RtJ6JUOdA==}
+    dependencies:
+      '@egjs/component': 3.0.5
+    dev: false
+
   /@clerk/backend@0.29.0:
     resolution: {integrity: sha512-2miuqyzmlzboTcLQOtafGw4+InnkFALMWjM9l9gu75KBWg1pUdFYLEDcJV+MHt0ZtY+pZO7aGnPE0Mf7QnG+bA==}
     engines: {node: '>=14'}
@@ -292,6 +323,112 @@ packages:
     resolution: {integrity: sha512-9yL3BlThh3PfyRg/zS8cQVic3FdFaIOp361YrDrQ4fqYbYE47SGWF4ji9KoFxYF4ejfDEptayeG9jF2C465KRQ==}
     dependencies:
       '@cloudinary/transformation-builder-sdk': 1.6.1
+    dev: false
+
+  /@egjs/agent@2.4.3:
+    resolution: {integrity: sha512-XvksSENe8wPeFlEVouvrOhKdx8HMniJ3by7sro2uPF3M6QqWwjzVcmvwoPtdjiX8O1lfRoLhQMp1a7NGlVTdIA==}
+    dev: false
+
+  /@egjs/axes@3.9.0:
+    resolution: {integrity: sha512-V+HxHxEGmlu/0yJ9kqlj2doiJt1yVeROTy/0Qf+IaJ9hMabjzUgfYffGR+3atcRpejjGbcpAIiBrGbAkDVaLjg==}
+    dependencies:
+      '@cfcs/core': 0.1.0
+      '@egjs/agent': 2.4.3
+      '@egjs/component': 3.0.5
+    dev: false
+
+  /@egjs/children-differ@1.0.1:
+    resolution: {integrity: sha512-DRvyqMf+CPCOzAopQKHtW+X8iN6Hy6SFol+/7zCUiE5y4P/OB8JP8FtU4NxtZwtafvSL4faD5KoQYPj3JHzPFQ==}
+    dependencies:
+      '@egjs/list-differ': 1.0.1
+    dev: false
+
+  /@egjs/component@2.2.2:
+    resolution: {integrity: sha512-2m6nu6/Mbs6VnoT4IHFGUBX6V82Zp01zDmlWpIJ3fMatHpe7BB1qUYFgMmSWGY0uOvOl4plvflwbCRUAGMfwWQ==}
+    dev: false
+
+  /@egjs/component@3.0.5:
+    resolution: {integrity: sha512-cLcGizTrrUNA2EYE3MBmEDt2tQv1joVP1Q3oDisZ5nw0MZDx2kcgEXM+/kZpfa/PAkFvYVhRUZwytIQWoN3V/w==}
+    dev: false
+
+  /@egjs/flicking-plugins@4.7.1(@egjs/flicking@4.11.2):
+    resolution: {integrity: sha512-J0k499sCs5IAMXAJuBcrY1OoiHRi4BPbS1/RCCkIzsYgdoHzcAUjKyhSsms3gLz4O/K5eTbBmWBUtFO86fETHg==}
+    peerDependencies:
+      '@egjs/flicking': ^4.1.0
+    dependencies:
+      '@egjs/flicking': 4.11.2
+    dev: false
+
+  /@egjs/flicking@4.11.2:
+    resolution: {integrity: sha512-qOAn3NUpVlPkakaVJYFeFg5LlNNoh+QJVjFEcj4maQ9T+gRngWKha/cYpPgYukMIsjS5F8XYcgeeOINK/md62A==}
+    dependencies:
+      '@egjs/axes': 3.9.0
+      '@egjs/component': 3.0.5
+      '@egjs/imready': 1.4.1
+      '@egjs/list-differ': 1.0.1
+    dev: false
+
+  /@egjs/grid@1.15.0:
+    resolution: {integrity: sha512-qJ+JxwA+mN47PYaAcYHXttmINEpsN4Mf9uBQZ6m7innIRGHw3zDf47vlTxb0iZwWGynRAwl3BjPli6oc80vuWg==}
+    dependencies:
+      '@egjs/children-differ': 1.0.1
+      '@egjs/component': 3.0.5
+      '@egjs/imready': 1.4.1
+    dev: false
+
+  /@egjs/imready@1.4.1:
+    resolution: {integrity: sha512-JIOBs4lB7FYdsKi5uvz2j3SObX8eShtZjtqlOH41tm185aJOQZwiKBK8+V4MxzG4X6DqVhpdN8UcuVwBbElfsg==}
+    dependencies:
+      '@cfcs/core': 0.0.24
+      '@egjs/component': 3.0.5
+    dev: false
+
+  /@egjs/infinitegrid@4.11.0:
+    resolution: {integrity: sha512-Wzd1qzzKdzN9RSuIOyaLpydkQt6oc3PDJoiICKal8pEMfk1fuEqWdtONYFBKv/Xq06/LEPFzEXYbwj1q2zPttQ==}
+    dependencies:
+      '@cfcs/core': 0.0.5
+      '@egjs/children-differ': 1.0.1
+      '@egjs/component': 3.0.5
+      '@egjs/grid': 1.15.0
+      '@egjs/list-differ': 1.0.1
+    dev: false
+
+  /@egjs/jquery-pauseresume@2.0.1:
+    resolution: {integrity: sha512-Co2/cB3m04jHBJImv+pIyq/WE+wEvI3iSxnUleuKb/UEAo15OzLBH5QownWnwfFhHtRVoy0ZdIj7G0bU4ObSmA==}
+    dependencies:
+      jquery: 1.12.4
+    dev: false
+
+  /@egjs/jquery-transform@2.0.0:
+    resolution: {integrity: sha512-oAHphVAcsb+WoMfhy+8MDoDix0wRWVBKHcVZvsd3Pkh51Kfw4dLHxjcUGN8syD69oaP9k1d9eoQNts8XZzX1bg==}
+    dependencies:
+      jquery: 1.12.4
+    dev: false
+
+  /@egjs/list-differ@1.0.1:
+    resolution: {integrity: sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg==}
+    dev: false
+
+  /@egjs/persist@2.6.0:
+    resolution: {integrity: sha512-/GqEpLFAWZBPSjnMifDie8sz8lp/ImP8+SpWMNZcbXNHESOSJRLaKuy1eu6BVY5F9ATCSscNx5s8Ll2q6Au6Qg==}
+    dev: false
+
+  /@egjs/react-flicking@4.11.2:
+    resolution: {integrity: sha512-tayEvJFMj97w+3iDDQVKQl02dc8Z3VoZ7rjU5vBGJP3XFVsoZXyelQIly4a/EtR+4KJj6RvVGj5CT4Rg7juRdw==}
+    dependencies:
+      '@egjs/component': 3.0.5
+      '@egjs/flicking': 4.11.2
+      '@egjs/list-differ': 1.0.1
+    dev: false
+
+  /@egjs/rotate@2.1.0:
+    resolution: {integrity: sha512-sXy54uHY8MKsnDh/KMZWrfWl8Wz9i4pakUagXu2Ks5VVYSCHGU75mFC64kmI6jm8BHXxQoVAC3YmYxJQ5dE8cg==}
+    dev: false
+
+  /@egjs/visible@2.4.0:
+    resolution: {integrity: sha512-p9hRZCgH8dsJDKcBbOTPg25dxenuDw8EYm+15eN1Q/LJkNtL5hpJ3ee/QBK4TTICuOjzXpZj4jBdLqaVArykwA==}
+    dependencies:
+      '@egjs/component': 2.2.2
     dev: false
 
   /@emotion/is-prop-valid@0.8.8:
@@ -2128,6 +2265,21 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /egjs@2.2.0:
+    resolution: {integrity: sha512-aOvFe5sYg3JdmeQoxGnmhQT77KHX9vibHbqOufWbgoZwZJhjaJs0q36ZSVQqNZXLdqbQkB8GBx4MA+OwmPbqgg==}
+    dependencies:
+      '@egjs/agent': 2.4.3
+      '@egjs/axes': 3.9.0
+      '@egjs/component': 3.0.5
+      '@egjs/flicking': 4.11.2
+      '@egjs/infinitegrid': 4.11.0
+      '@egjs/jquery-pauseresume': 2.0.1
+      '@egjs/jquery-transform': 2.0.0
+      '@egjs/persist': 2.6.0
+      '@egjs/rotate': 2.1.0
+      '@egjs/visible': 2.4.0
+    dev: false
+
   /electron-to-chromium@1.4.523:
     resolution: {integrity: sha512-9AreocSUWnzNtvLcbpng6N+GkXnCcBR80IQkxRC9Dfdyg4gaWNUPBujAHUpKkiUkoSoR9UlhA4zD/IgBklmhzg==}
     dev: true
@@ -2442,6 +2594,10 @@ packages:
   /jiti@1.20.0:
     resolution: {integrity: sha512-3TV69ZbrvV6U5DfQimop50jE9Dl6J8O1ja1dvBbMba/sZ3YBEQqJ2VZRoQPVnhlzjNtU1vaXRZVrVjU4qtm8yA==}
     hasBin: true
+
+  /jquery@1.12.4:
+    resolution: {integrity: sha512-UEVp7PPK9xXYSk8xqXCJrkXnKZtlgWkd2GsAQbMRFK6S/ePU2JN5G2Zum8hIVjzR3CpdfSqdqAzId/xd4TJHeg==}
+    dev: false
 
   /js-cookie@3.0.1:
     resolution: {integrity: sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==}
@@ -3459,7 +3615,3 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
